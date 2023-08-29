@@ -1,18 +1,16 @@
 <template>
-<div class="px-2">
   <div class="card" style="width: 16rem;">    
     <div class="card-body">
-        <h5 class="card-title">List title</h5> 
+        <h5 class="card-title">{{listTitle}}</h5> 
         <div class="d-flex flex-column">            
             <TaskWindow v-for="t in taskList" :key="t" :taskName="t" :taskDescription="t" />                   
         </div>
     </div>
     <div class="card-footer">
-        <FormNewTask v-if="!flag" @text-emitted="addNewTask" @cancel-emitting="flipFlag"></FormNewTask>
-        <button class="btn btn-primary" v-show="flag" @click="flipFlag">Add task</button>
+        <FormNewTask v-if="!flag" :formValues="formValues" @text-emitted="addNewTask" @cancel-emitting="flipFlag"></FormNewTask>
+        <button class="btn btn-light w-100" v-show="flag" @click="flipFlag">Add task</button>
     </div>    
   </div>
-</div>
 </template>
 
 <script>
@@ -25,9 +23,13 @@ export default {
   components: {
     TaskWindow, FormNewTask
   },
+  props: {
+    listTitle: String
+  },
   data: function() {
     return {
       taskList: [], 
+      formValues: {placeHolder: "Task info..", title: "New task", buttonName: "Add Task"},
       flag: true    
     }
   }
