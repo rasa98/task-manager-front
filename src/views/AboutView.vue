@@ -7,26 +7,26 @@
         <ListWindow :listTitle="l" />
       </div>  
       <div class="m-2">    
-        <FormNewTask v-if="!flag" style="width: 16rem;" :formValues="formValues" @text-emitted="addNewTask" @cancel-emitting="flipFlag"></FormNewTask>
+        <FormNew v-if="!flag" style="width: 16rem;" :formValues="formValues" @text-emitted="addNewList"></FormNew>
         <button class="btn btn-light" v-show="flag" @click="flipFlag">+ Add another list</button>
       </div>
   </div>
-  </template>
+</template>
 
 <script>  
 import ListWindow from '@/components/ListWindow.vue'
-import FormNewTask from '@/components/FormNewTask.vue'
+import FormNew from '@/components/formComponents/FormNew.vue'
 
 
 export default {
   name: "AboutView",
   components: {
-    FormNewTask, ListWindow
+    FormNew, ListWindow
   },
   data: function() {
     return {
       lists: [], 
-      formValues: {placeHolder: "List info..", title: "New list", buttonName: "Add list"},
+      formValues: {placeHolder: "List name", title: "Create new list", buttonName: "Add list"},
       flag: true    
     }
   }
@@ -35,9 +35,11 @@ export default {
     flipFlag: function() {
         this.flag = !this.flag;
     },  
-    addNewTask(msg) {
-        this.lists.push(msg);
-        this.flipFlag();                
+    addNewList(msg) {
+      if (msg !== '') {
+        this.lists.push(msg);                        
+      }
+      this.flipFlag();
     }  
   }
 }

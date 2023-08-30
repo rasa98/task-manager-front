@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="card-footer">
-        <FormNewTask v-if="!flag" :formValues="formValues" @text-emitted="addNewTask" @cancel-emitting="flipFlag"></FormNewTask>
+        <FormNew v-if="!flag" :formValues="formValues" @text-emitted="addNewTask"></FormNew>
         <button class="btn btn-light w-100" v-show="flag" @click="flipFlag">Add task</button>
     </div>    
   </div>
@@ -15,13 +15,13 @@
 
 <script>
 import TaskWindow from '@/components/TaskWindow.vue'
-import FormNewTask from '@/components/FormNewTask.vue'
+import FormNew from '@/components/formComponents/FormNew.vue'
 
 
 export default {
   name: "ListWindow",
   components: {
-    TaskWindow, FormNewTask
+    TaskWindow, FormNew
   },
   props: {
     listTitle: String
@@ -39,9 +39,11 @@ export default {
         this.flag = !this.flag;
     },  
     addNewTask(msg) {
+      if (msg !== ''){
         this.taskList.push(msg);
-        this.flipFlag();
-        console.log('taskList value in myComponent:', this.taskList);        
+      }
+      this.flipFlag();
+      console.log('taskList value in myComponent:', this.taskList);        
     }  
   }
 }

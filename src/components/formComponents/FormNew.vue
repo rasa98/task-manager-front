@@ -3,11 +3,11 @@
             <div class="card-body">
                 <h5 class="card-title"> {{formValues.title}} </h5>
                 <div class="py-2">
-                    <textarea class="form-control" v-model="taskDescription" @input="adjustTextareaHeight" :placeholder="formValues.placeHolder"></textarea>
+                    <textarea ref="myTextarea" class="form-control" @keydown.enter="buttonAdd" v-model="description" @input="adjustTextareaHeight" :placeholder="formValues.placeHolder"></textarea>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <button class="btn btn-secondary" @click="sendTaskName">{{formValues.buttonName}}</button>
-                    <button class="btn btn-secondary" @click="cancelAddingTasking">Quit</button>
+                    <button class="btn btn-secondary" @click="buttonAdd">{{formValues.buttonName}}</button>
+                    <button class="btn btn-secondary" @click="cancelAdding">Quit</button>
                 </div>                
             </div>
         </div>
@@ -17,7 +17,7 @@
 export default {
     data() {
         return {
-            taskDescription: ''
+            description: ''
         };
     },
     props: {
@@ -29,12 +29,17 @@ export default {
             textarea.style.height = 'auto';
             textarea.style.height = `${textarea.scrollHeight}px`;        
         },  
-        sendTaskName() {
-            this.$emit('text-emitted', this.taskDescription);
+        buttonAdd() {
+            this.$emit('text-emitted', this.description);            
         },
-        cancelAddingTasking() {
-            this.$emit('cancel-emitting');
+        cancelAdding() {            
+            this.$emit('text-emitted', '');
         }
+    },
+    created() {
+        this.$nextTick(() => {
+            this.$refs.myTextarea.focus();
+        });
     }
 }
 </script>
