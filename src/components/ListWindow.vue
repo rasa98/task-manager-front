@@ -1,7 +1,11 @@
 <template>
   <div class="card" style="width: 16rem;">    
-    <div class="card-body">
-        <h5 class="card-title">{{listTitle}}</h5> 
+    
+    
+    
+    <div class="card-body custom">        
+        <TitleEdible :initialValue="listTitle"></TitleEdible>
+        
         <div class="d-flex flex-column">            
             <TaskWindow v-for="t in taskList" :key="t" :taskName="t" :taskDescription="t" />                   
         </div>
@@ -16,12 +20,14 @@
 <script>
 import TaskWindow from '@/components/TaskWindow.vue'
 import FormNew from '@/components/formComponents/FormNew.vue'
+import TitleEdible from './formComponents/TitleEdible.vue'
 
 
 export default {
   name: "ListWindow",
   components: {
-    TaskWindow, FormNew
+    TaskWindow, FormNew,
+    TitleEdible
   },
   props: {
     listTitle: String
@@ -50,9 +56,7 @@ export default {
 </script>
 
 <style scoped>
-    /* img {
-        width: 150px;
-        height: auto;
-        align-self: center;
-    } */
+  .custom {
+      background-color: rgb(229, 229, 229);
+  }
 </style>

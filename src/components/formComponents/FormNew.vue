@@ -1,6 +1,6 @@
 <template>
         <div class="card" style="width: auto;">            
-            <div class="card-body">
+            <div class="card-body" @blur="cancelAdding">
                 <h5 class="card-title"> {{formValues.title}} </h5>
                 <div class="py-2">
                     <textarea ref="myTextarea" class="form-control" @keydown.enter="buttonAdd" v-model="description" @input="adjustTextareaHeight" :placeholder="formValues.placeHolder"></textarea>
