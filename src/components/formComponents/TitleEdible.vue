@@ -54,7 +54,7 @@ export default {
     font-size: 1.25rem; /* Increase font size */
     font-weight: bold; /* Add font weight */
     background-color: inherit;
-    margin-bottom: 0.8rem;    
+    margin-bottom: 0.5rem;    
 }
 p {
   cursor: pointer;

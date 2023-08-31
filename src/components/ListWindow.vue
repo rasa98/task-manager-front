@@ -1,14 +1,12 @@
 <template>
-  <div class="card" style="width: 16rem;">    
-    
-    
-    
+  <div class="card" style="width: 16rem; min-width: 16rem;">
     <div class="card-body custom">        
-        <TitleEdible :initialValue="listTitle"></TitleEdible>
-        
-        <div class="d-flex flex-column">            
-            <TaskWindow v-for="t in taskList" :key="t" :taskName="t" :taskDescription="t" />                   
-        </div>
+        <TitleEdible :initialValue="listTitle"></TitleEdible> 
+          <draggable class="d-flex flex-column" itemKey="id" :list="taskList" ghost-class="ghost" group="tasks">
+            <template #item="{element}">
+              <TaskWindow :taskDescription="element" />                   
+            </template>
+          </draggable>        
     </div>
     <div class="card-footer">
         <FormNew v-if="!flag" :formValues="formValues" @text-emitted="addNewTask"></FormNew>
@@ -21,13 +19,14 @@
 import TaskWindow from '@/components/TaskWindow.vue'
 import FormNew from '@/components/formComponents/FormNew.vue'
 import TitleEdible from './formComponents/TitleEdible.vue'
+import draggable from 'vuedraggable'
 
 
 export default {
   name: "ListWindow",
   components: {
     TaskWindow, FormNew,
-    TitleEdible
+    TitleEdible, draggable
   },
   props: {
     listTitle: String
@@ -36,7 +35,8 @@ export default {
     return {
       taskList: [], 
       formValues: {placeHolder: "Task info..", title: "New task", buttonName: "Add Task"},
-      flag: true    
+      flag: true,
+      drag: false   
     }
   }
   ,  
@@ -47,6 +47,7 @@ export default {
     addNewTask(msg) {
       if (msg !== ''){
         this.taskList.push(msg);
+        // console.log('taskList:', this.taskList);
       }
       this.flipFlag();
       console.log('taskList value in myComponent:', this.taskList);        
@@ -58,5 +59,11 @@ export default {
 <style scoped>
   .custom {
       background-color: rgb(229, 229, 229);
+      height: auto;
+      flex: 0 0 0;
+  }
+  .ghost {
+    opacity: 0.5;
+    background: #c3c3c3;
   }
 </style>
