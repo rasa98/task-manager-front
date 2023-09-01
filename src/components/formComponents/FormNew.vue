@@ -1,5 +1,5 @@
 <template>
-        <div class="card" style="width: auto;">            
+        <div class="card" style="width: auto;" ref="myComponent">            
             <div class="card-body">
                 <h5 class="card-title"> {{formValues.title}} </h5>
                 <div class="py-2">
@@ -34,6 +34,14 @@ export default {
         },
         cancelAdding() {            
             this.$emit('text-emitted', '');
+        },
+        handleDocumentClick(event) {
+            // Check if the click target is outside of your component
+            const componentElement = this.$refs.myComponent;
+            if (componentElement && !componentElement.contains(event.target)) {                
+                this.$emit("out-of-focus");
+                // console.log("document sensed click and called callback");
+            }
         }
     },
     created() {
@@ -64,6 +72,15 @@ export default {
             window.scrollBy(amount, amount2);
             ta.focus();
         })            
+    },
+    mounted () {
+        document.addEventListener("click", this.handleDocumentClick);
+        // console.log("form successfully mounted and click listener added.");
+    },
+    beforeUnmount() {
+        // Remove the click event listener - no mem leaks
+        document.removeEventListener("click", this.handleDocumentClick);
+        // console.log("form successfully unmounted and click listener removed.");
     }
 }
 </script>

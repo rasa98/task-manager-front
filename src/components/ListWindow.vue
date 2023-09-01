@@ -4,13 +4,13 @@
         <TitleEdible :initialValue="listTitle"></TitleEdible> 
           <draggable class="d-flex flex-column" itemKey="id" :list="taskList" ghost-class="ghost" group="tasks">
             <template #item="{element}">
-              <TaskWindow :taskDescription="element" />                   
+              <TaskWindow :taskDescription="element.title" />                   
             </template>
           </draggable>        
     </div>
     <div class="card-footer">
-        <FormNew v-if="!flag" :formValues="formValues" @text-emitted="addNewTask"></FormNew>
-        <button class="btn btn-light w-100" v-show="flag" @click="flipFlag">Add task</button>
+        <FormNew v-if="!flag" :formValues="formValues" @out-of-focus="flipFlag" @text-emitted="addNewTask"></FormNew>
+        <button class="btn btn-light w-100" v-show="flag" @click.stop="flipFlag">Add task</button>
     </div>    
   </div>
 </template>
@@ -20,6 +20,8 @@ import TaskWindow from '@/components/TaskWindow.vue'
 import FormNew from '@/components/formComponents/FormNew.vue'
 import TitleEdible from './formComponents/TitleEdible.vue'
 import draggable from 'vuedraggable'
+import axios from 'axios';
+// import serverUrl from '@/config';
 
 
 export default {
@@ -44,13 +46,18 @@ export default {
     flipFlag: function() {
         this.flag = !this.flag;
     },  
-    addNewTask(msg) {
-      if (msg !== ''){
-        this.taskList.push(msg);
-        // console.log('taskList:', this.taskList);
+    addNewTask(name) {      
+      if (name !== ''){
+        axios.post(`tasks`, {title: name})
+          .then(r => {
+            var task = r.data;
+            this.taskList.push(task);            
+          }).catch(error => {
+          // Handle errors
+          console.error('POST request error:', error);
+        });       
       }
-      this.flipFlag();
-      console.log('taskList value in myComponent:', this.taskList);        
+      this.flipFlag();          
     }  
   }
 }
@@ -64,6 +71,6 @@ export default {
   }
   .ghost {
     opacity: 0.5;
-    background: #c3c3c3;
+    background: #c3c3c3;    
   }
 </style>

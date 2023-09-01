@@ -13,8 +13,8 @@
             </template> 
             <template #footer> 
               <div class="m-2" style="width: 16rem; min-width: 16rem;">                               
-                    <FormNew v-if="!flag" :formValues="formValues" @text-emitted="addNewList"></FormNew>
-                    <button class="btn btn-light" v-show="flag" @click="flipFlag">+ Add another list</button>                  
+                    <FormNew v-if="!flag" :formValues="formValues" @out-of-focus="flipFlag" @text-emitted="addNewList"></FormNew>
+                    <button class="btn btn-light" v-show="flag" @click.stop="flipFlag">+ Add another list</button>                  
               </div>
             </template>           
       </draggable>
