@@ -2,7 +2,7 @@
     <div class="my-2">
         <div class="card bg-light" style="width: auto;">            
             <div class="card-body custom" @mouseenter="() => flag=true" @mouseleave="() => flag=false">                
-                <p class="card-text"> {{ taskDescription }} </p>
+                <p class="card-text"> {{ task.title }} </p>
                 <button class="btn btn-secondary" v-show="flag" @click="none">
                     <img src="../assets/pencil.svg">                        
                 </button>                
@@ -16,11 +16,12 @@ export default {
   name: "TaskWindow",
   data() {
     return {
-        flag: false
+        flag: false,
+        task: this.taskInfo
     }
   },
   props: {
-    taskDescription: String
+    taskInfo: Object
   }
 }
 </script>

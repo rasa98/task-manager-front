@@ -1,10 +1,10 @@
 <template>
   <div class="card" style="width: 16rem; min-width: 16rem;">
     <div class="card-body custom">        
-        <TitleEdible :initialValue="listTitle"></TitleEdible> 
+        <TitleEdible :initialValue="list.name"></TitleEdible> 
           <draggable class="d-flex flex-column" itemKey="id" :list="taskList" ghost-class="ghost" group="tasks">
             <template #item="{element}">
-              <TaskWindow :taskDescription="element.title" />                   
+              <TaskWindow :taskInfo="element" />                   
             </template>
           </draggable>        
     </div>
@@ -31,14 +31,19 @@ export default {
     TitleEdible, draggable
   },
   props: {
-    listTitle: String
+    listInfo: Object
   },
   data: function() {
     return {
-      taskList: [], 
+      list: this.listInfo, 
       formValues: {placeHolder: "Task info..", title: "New task", buttonName: "Add Task"},
       flag: true,
       drag: false   
+    }
+  },
+  computed: {
+    taskList(){
+      return this.list?.taskList || [];
     }
   }
   ,  
@@ -48,13 +53,15 @@ export default {
     },  
     addNewTask(name) {      
       if (name !== ''){
-        axios.post(`tasks`, {title: name})
-          .then(r => {
-            var task = r.data;
-            this.taskList.push(task);            
-          }).catch(error => {
-          // Handle errors
-          console.error('POST request error:', error);
+        axios.post(`lists/${this.list.id}/addTask`, 
+          {title: name, taskOrder: this.taskList.length}) 
+            .then(r => {
+              var task = r.data;
+              console.log("After response, added task: ", task);
+              this.list.taskList.push(task); // todo return only id and add it
+            }).catch(error => {
+            // Handle errors
+            console.error('POST request error:', error);
         });       
       }
       this.flipFlag();          
