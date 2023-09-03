@@ -12,6 +12,7 @@ export default {
     return {
       isEditing: false,
       inputValue: '',
+      oldInputValue: '',
       fP: ''
     };
   },
@@ -21,8 +22,19 @@ export default {
       immediate: true, // Trigger the watcher immediately on component creation
       handler(newValue) {
         this.inputValue = newValue;
+        this.oldInputValue = newValue;
       },
     },
+    isEditing: {
+      handler(newValue) {
+        if(newValue == false && this.oldInputValue !== this.inputValue){
+          console.log("old ",this.oldInputValue);
+          console.log("new ", this.inputValue);
+          this.$emit('name-update', this.inputValue);
+          this.oldInputValue = this.inputValue;
+        }
+      },
+    }
   },
   methods: {
     toggleMode() {

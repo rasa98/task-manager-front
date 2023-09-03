@@ -1,7 +1,7 @@
 <template>
   <div class="card" style="width: 16rem; min-width: 16rem;">
     <div class="card-body custom">        
-        <TitleEdible :initialValue="list.name"></TitleEdible> 
+        <TitleEdible :initialValue="list.name" @name-update="updateListName"></TitleEdible> 
           <draggable class="d-flex flex-column" itemKey="id" :list="taskList" ghost-class="ghost" group="tasks">
             <template #item="{element}">
               <TaskWindow :taskInfo="element" />                   
@@ -65,7 +65,19 @@ export default {
         });       
       }
       this.flipFlag();          
-    }  
+    },
+    updateListName(newListName) {
+      axios.put(`lists`, 
+          {name: newListName, id: this.list.id}) 
+            .then(r => {
+              var title = r.data;
+              console.log("updated new list name in backend", title);              
+            }).catch(error => {
+            // Handle errors
+            console.error('PUT request error:', error);
+        });       
+    }
+      
   }
 }
 </script>
