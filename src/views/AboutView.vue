@@ -1,5 +1,5 @@
 <template>
-  <board-window v-if="board != null" />
+  <board-window v-if="flag" />
 </template>
 
 <script>  
@@ -15,16 +15,12 @@ export default {
   },
   data(){
     return {
-      flag: false,
-      board: null
+      flag: false      
     }
   },
-  mounted(){
-    axios.post('boards', {name: "The guest board"}).then(r => {
-      var data = r.data;
-      this.board = data;
-      console.log("Board data:::: ", data);
-    })
+  async mounted(){
+    await axios.post('boards', {name: "The guest board"}).then();
+    this.flag = true;
   }
   
 }
