@@ -2,8 +2,9 @@
     <div class="my-2">
         <div class="card bg-light" style="width: auto;">            
             <div class="card-body custom" @mouseenter="() => flag=true" @mouseleave="() => flag=false">                
-                <p class="card-text"> {{ task.title }} </p>
-                <button class="btn btn-secondary" v-show="flag" @click="none">
+                <!-- <p class="card-text"> {{ task.title }} </p> -->
+               <TitleEdible style="box-shadow: none;" :initialValue="task.title" @name-update="updateTitle"></TitleEdible>
+               <button class="btn btn-secondary" v-show="flag" @click="none">
                     <img src="../assets/pencil.svg">                        
                 </button>                
             </div>
@@ -12,8 +13,12 @@
 </template>
 
 <script>
+import axios from 'axios'
+import TitleEdible from './formComponents/TitleEdible.vue' 
+
 export default {
   name: "TaskWindow",
+  components: {TitleEdible}, 
   data() {
     return {
         flag: false,
@@ -22,14 +27,27 @@ export default {
   },
   props: {
     taskInfo: Object
+  },
+  methods: {
+    updateTitle(newTaskTitle){
+        axios.put(`tasks`, 
+          {title: newTaskTitle, id: this.task.id}) 
+            .then(r => {
+              var updatedTask = r.data;
+              console.log("updated task title in backend", updatedTask);              
+            }).catch(error => {
+            // Handle errors
+            console.error('PUT request error:', error);
+        });
+    }
   }
 }
 </script>
 
 <style scoped>    
-    p {
+    /* p {
         text-align: left;
-    }
+    } */
     button {
         position: absolute;
         top: 0;
@@ -39,9 +57,6 @@ export default {
     button:hover {
         background-color: rgb(67, 67, 67); 
         border-color: rgb(67, 67, 67);
-    }
-    .custom {
-        box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.3);
     }
     .custom:hover {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);

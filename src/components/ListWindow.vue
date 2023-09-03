@@ -70,8 +70,8 @@ export default {
       axios.put(`lists`, 
           {name: newListName, id: this.list.id}) 
             .then(r => {
-              var title = r.data;
-              console.log("updated new list name in backend", title);              
+              var updatedList = r.data;
+              console.log("updated new list name in backend", updatedList);              
             }).catch(error => {
             // Handle errors
             console.error('PUT request error:', error);
