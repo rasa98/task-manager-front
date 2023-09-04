@@ -26,7 +26,7 @@ export default {
     }
   },
   props: {
-    taskInfo: Object
+    taskInfo: Object    
   },
   methods: {
     updateTitle(newTaskTitle){

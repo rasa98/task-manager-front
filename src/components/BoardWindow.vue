@@ -94,8 +94,10 @@ export default {
       }
       this.flipFlag();
     },
-    onDragUpdateListsOrdering(evt) {
+    onDragUpdateListsOrdering(evt) {      
       const { oldIndex, newIndex } = evt;
+      if (oldIndex == newIndex)
+        return;
       const start = Math.min(oldIndex, newIndex);
       const end = start == oldIndex ? newIndex : oldIndex;
       const arrOfL = [];

@@ -2,7 +2,7 @@
   <div class="card" style="width: 16rem; min-width: 16rem;">
     <div class="card-body custom">        
         <TitleEdible :initialValue="list.name" @name-update="updateListName"></TitleEdible> 
-          <draggable class="d-flex flex-column" itemKey="id" :list="taskList" ghost-class="ghost" group="tasks">
+          <draggable class="d-flex flex-column" itemKey="id" :list="taskList" @change="onDragUpdateTasksOrdering" ghost-class="ghost" group="tasks">
             <template #item="{element}">
               <TaskWindow :taskInfo="element" />                   
             </template>
@@ -44,6 +44,9 @@ export default {
   computed: {
     taskList(){
       return this.list?.taskList || [];
+    },
+    listId(){
+      return this.list.id;
     }
   }
   ,  
@@ -53,11 +56,11 @@ export default {
     },  
     addNewTask(name) {      
       if (name !== ''){
-        axios.post(`lists/${this.list.id}/addTask`, 
+        axios.post(`tasks/${this.list.id}/addTask`, 
           {title: name, taskOrder: this.taskList.length}) 
             .then(r => {
               var task = r.data;
-              console.log("After response, added task: ", task);
+              console.log("After response, added task: ", task);              
               this.list.taskList.push(task); // todo return only id and add it
             }).catch(error => {
             // Handle errors
@@ -76,8 +79,51 @@ export default {
             // Handle errors
             console.error('PUT request error:', error);
         });       
-    }
+    },
+    async onDragUpdateTasksOrdering(evt) {
+      var start, end, el;
+      if (evt.added !== undefined){
+        start = evt.added.newIndex;
+        end = this.taskList.length - 1;
+        el = evt.added.element;
+        el.parentId = this.listId; // locally update only in added
+      } else if (evt.moved !== undefined) {
+        start = Math.min(evt.moved.oldIndex, evt.moved.newIndex);
+        end = start == evt.moved.oldIndex ? evt.moved.newIndex : evt.moved.oldIndex;
+      } else {
+        start = evt.removed.oldIndex;
+        end = this.taskList.length - 1;
+      }
+
+      try {
+        await this.onDragUpdateTaskOrder(start, end);
+        if (el !== undefined) {
+          await this.updateTaskParent(el);
+        }
+      } catch (error) {
+        // Handle errors here
+        console.error('Error:', error);
+      }
+    },
+    async onDragUpdateTaskOrder(start, end) {
+      const arrOfT = [];
+      var t;
+      for (let i = start; i <= end; i++) {
+        t = this.taskList[i];
+        t.taskOrder = i; // local change
+        arrOfT.push({ id: t.id, taskOrder: t.taskOrder });
+      }
+      const response = await axios.put("tasks/all", arrOfT);
+      console.log("After db tasks update their order: ", response.data);
       
+    },
+    async updateTaskParent(updatedTask) {
+      
+        await axios.put(`tasks`, { id: updatedTask.id, parentId: this.listId });
+        // You can add a callback here if needed
+      
+    }
+
   }
 }
 </script>
