@@ -1,9 +1,15 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <!-- <nav class="navbar navbar-light">
+    <div class="d-flex flex-row mx-5">      
+      <router-link class="mx-5" to="/">Home</router-link> 
+      <router-link class="mx-5" to="/about">About</router-link> 
+      <router-link class="mx-5" to="/login">Login</router-link>
+    </div>    
   </nav>
-  <router-view/>
+  <router-view /> -->
+  <navigation-bar/>
+
+
   <!-- <router-view v-slot="{ Component }">
     <keep-alive>
       <component :is="Component" />
@@ -11,25 +17,25 @@
   </router-view> -->
 </template>
 
+<script>
+import NavigationBar from '@/components/NavigationBar.vue'
+
+export default {  
+  components: {
+    NavigationBar
+  }
+}
+</script>
+
+
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
 
-nav {
-  padding: 30px;
-}
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>

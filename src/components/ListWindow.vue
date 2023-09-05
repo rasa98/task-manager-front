@@ -1,7 +1,7 @@
 <template>
   <div class="card" style="width: 16rem; min-width: 16rem;">
     <div class="card-body custom">        
-        <TitleEdible :initialValue="list.name" @name-update="updateListName"></TitleEdible> 
+        <TitleEdible style="font-weight: bold;font-size: 1.25rem;" :initialValue="list.name" @name-update="updateListName"></TitleEdible> 
           <draggable class="d-flex flex-column" itemKey="id" :list="taskList" @change="onDragUpdateTasksOrdering" ghost-class="ghost" group="tasks">
             <template #item="{element}">
               <TaskWindow :taskInfo="element" />                   
