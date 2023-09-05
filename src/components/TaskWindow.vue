@@ -30,15 +30,16 @@ export default {
   },
   methods: {
     updateTitle(newTaskTitle){
-        axios.put(`tasks`, 
-          {title: newTaskTitle, id: this.task.id}) 
-            .then(r => {
-              var updatedTask = r.data;
-              console.log("updated task title in backend", updatedTask);              
-            }).catch(error => {
-            // Handle errors
-            console.error('PUT request error:', error);
-        });
+      this.task.title = newTaskTitle;
+      axios.put(`tasks`, 
+        {title: newTaskTitle, id: this.task.id}) 
+          .then(r => {
+            var updatedTask = r.data;
+            console.log("updated task title in backend", updatedTask);              
+          }).catch(error => {
+          // Handle errors
+          console.error('PUT request error:', error);
+      });
     }
   }
 }

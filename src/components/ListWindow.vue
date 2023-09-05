@@ -70,6 +70,7 @@ export default {
       this.flipFlag();          
     },
     updateListName(newListName) {
+      this.list.name = newListName;
       axios.put(`lists`, 
           {name: newListName, id: this.list.id}) 
             .then(r => {
@@ -111,7 +112,7 @@ export default {
       for (let i = start; i <= end; i++) {
         t = this.taskList[i];
         t.taskOrder = i; // local change
-        arrOfT.push({ id: t.id, taskOrder: t.taskOrder });
+        arrOfT.push({ id: t.id, taskOrder: t.taskOrder, title: t.title}); // added title za svaki slucaj..:D
       }
       const response = await axios.put("tasks/all", arrOfT);
       console.log("After db tasks update their order: ", response.data);
