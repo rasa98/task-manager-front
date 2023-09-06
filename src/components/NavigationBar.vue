@@ -1,6 +1,6 @@
 <template>
-<div id="nav">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mx-5">
+<div v-if="showNav" id="nav">
+    <nav class="navbar navbar-expand-lg mx-5">
         <a class="navbar-brand" href="#">
             <img alt="Vue logo" src="../assets/logo.png">
         </a>
@@ -32,7 +32,15 @@
 
 <script>
 export default {
+    computed: {
+        showNav() {
+        // Define the routes where you want to hide the navbar
+        const routesToHideNavbar = ['login', 'signup']; // Replace with your route names
 
+        // Check if the current route is in the list of routes to hide the navbar
+        return !routesToHideNavbar.includes(this.$route.name);
+        },
+  },
 }
 </script>
 
@@ -41,35 +49,40 @@ export default {
         color: #000000;
         font-size: 28px;        
     }
-    nav {
-        padding: 30px;  
-        height: 90px; 
-        background-color: #cbcbcb;
-        text-align: center;
+    #nav {                
+        background-color: hsl(83, 100%, 97%);
+        backdrop-filter: blur(10px);        
+    }
+    /* .transparent-navbar {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+  } */
+
+    nav a {
+    font-weight: bold;
+    color: #cb2c2c;   
+    /* font-family: Avenir, Helvetica, Arial, sans-serif;   */
+    }
+    img {
+    width: 50px;
+    height: auto; 
     }
 
-nav a {
-  font-weight: bold;
-  color: #cb2c2c;   
-  /* font-family: Avenir, Helvetica, Arial, sans-serif;   */
-}
-img {
-   width: 50px;
-   height: auto; 
-}
 
 
 
+    /* nav a:hover {  
+    /* color: #1188ff; */    
+    /* background: rgb(224, 224, 224);  */
+    /* border-radius: .5rem; */
+    /* } */
 
-/* nav a:hover {  
-  /* color: #1188ff; */    
-  /* background: rgb(224, 224, 224);  */
-  /* border-radius: .5rem; */
-/* } */
-
-nav a.router-link-exact-active {
-  /* color: whitesmoke; */
-  background: rgb(207, 207, 207);
-  border-radius: .5rem;
-}
+    nav a.router-link-exact-active {
+    /* color: whitesmoke; */
+    background: rgb(207, 207, 207);
+    border-radius: .5rem;
+    }
 </style>

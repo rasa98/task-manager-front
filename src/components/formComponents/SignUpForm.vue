@@ -7,35 +7,35 @@
           <div class="card" style="border-radius: 15px;">
             <div class="card-body p-5">
 
-              <form>
+              <form @submit.prevent="signup" @keyup.enter="signup">
 
                 <div class="form-floating mb-4">
-                  <input type="text" id="form3Example1cg" class="form-control form-control-lg" />
-                  <label class="form-label" for="form3Example1cg">Username</label>
-                </div>
-
-                <div class="form-floating mb-4">
-                  <input type="email" id="form3Example3cg" class="form-control form-control-lg" />
+                  <input v-model="formData.user" type="email" id="form3Example3cg" class="form-control form-control-lg" required/>
                   <label class="form-label" for="form3Example3cg">Your Email</label>
                 </div>
 
                 <div class="form-floating mb-4">
-                  <input type="password" id="form3Example4cg" class="form-control form-control-lg" />
+                  <input v-model="formData.pass" type="password" id="form3Example4cg" class="form-control form-control-lg" required/>
                   <label class="form-label" for="form3Example4cg">Password</label>
                 </div>
 
                 <div class="form-floating mb-4">
-                  <input type="password" id="form3Example4cdg" class="form-control form-control-lg" />
+                  <input v-model="formData.pass2" type="password" id="form3Example4cdg" class="form-control form-control-lg" required/>
                   <label class="form-label" for="form3Example4cdg">Repeat your password</label>
-                </div>                
+                </div>   
+
+                <label v-if="passFailed" class="mb-3" style="color: red;">Passwords don't match!</label>             
 
                 <div class="d-flex justify-content-center">
-                  <button type="button"
-                    class="btn btn-primary btn-lg ">Sign up</button>
+                  <button type="submit"
+                    class="btn btn-primary btn-lg">Sign up</button>
                 </div>
 
-                <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="#login"
+
+                <div class="d-inline-block bg-white rounded p-1 mt-3">
+                  <p class="text-center text-muted my-0">Have already an account? <a href="#login"
                     class="fw-bold text-body"><u>Login here</u></a></p>
+                </div>
 
               </form>
 
@@ -50,6 +50,8 @@
  
 
 <script>
+  import axios from 'axios';
+
   export default {  
     el: '#app1',
     components: {
@@ -57,19 +59,43 @@
     },
     data: function() {
       return {
-        signUpFailed: false,
-        passDontMatch: false,        
-        user: "",
-        pass: "",
-        pass2: ""   
+        formData: {
+          user: "",
+          pass: "",
+          pass2: ""
+        },
+        passFailed: false,
+        // isFormValid: true,          
       }
     },
+    methods: {
+      signup(){           
+        this.passFailed = true;
+
+        if (this.formData.pass === this.formData.pass2) {
+          axios.post('/user', {email: this.formData.user, pass: this.formData.pass}).then(r => {
+            var success = r.data;
+            if(success === true){
+              this.$router.push('/about');
+            } else {
+              alert('Account with that email already exist!!');
+            }          
+          })
+        } else {
+          this.passFailed = true;
+        }
+      }
+    }
   }
 </script>
 
 <style scoped>
+  .input-error {
+    border-color: red;
+  }
+
   .bg-image {
-    height: calc(100vh - 90px); 
+    height: 100vh;/*calc(100vh - 90px); */
     background-repeat: no-repeat;     
     background: url('../../assets/background.jpeg') no-repeat fixed; 
     -webkit-background-size: cover;
@@ -96,5 +122,9 @@
 
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   background: linear-gradient(to right, rgba(132, 250, 176, 1), rgba(143, 211, 244, 1))
+  }
+  .card {
+  background-color: rgba(255, 255, 255, 0.66); /* Semi-transparent white background */
+  backdrop-filter: blur(2px); 
   }
 </style>

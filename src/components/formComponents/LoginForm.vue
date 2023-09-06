@@ -7,28 +7,27 @@
           <div class="card" style="border-radius: 15px;">
             <div class="card-body p-5">              
 
-              <form>
+              <form @submit.prevent="login" @keyup.enter="login">
 
                 <div class="form-floating mb-4">
-                  <input v-model="user" type="email" id="form3Example3cg" class="form-control form-control-lg" />
+                  <input v-model="user" type="email" id="form3Example3cg" class="form-control form-control-lg" required/>
                   <label class="form-label" for="form3Example3cg">Your email</label>                  
                 </div>
 
                 <div class="form-floating mb-3">
-                  <input v-model="pass" type="password" id="form3Example4cg" class="form-control form-control-lg" />
+                  <input v-model="pass" type="password" id="form3Example4cg" class="form-control form-control-lg" required/>
                   <label class="form-label" for="form3Example4cg">Password</label>
                 </div>
 
                 <label v-if="failed" class="mb-3" style="color: red;">Username or password don't match!</label>
 
                 <div class="d-flex justify-content-center">
-                  <button type="button" @click="login"
-                    class="btn btn-primary btn-lg custom-4">Login</button>
+                  <button type="submit" class="btn btn-primary btn-lg custom-4">Login</button>
                 </div>
-
-                <p class="text-center text-muted mt-4 mb-0">Don't have an account? <a href="#signup"
-                    class="fw-bold text-body"><u>Sign up here</u></a></p>
-
+                <div class="d-inline-block bg-white rounded p-1 mt-3">
+                  <p class="text-center text-muted my-0">Don't have an account? <a href="#signup"
+                      class="fw-bold text-body"><u>Sign up here</u></a></p>
+                </div>
               </form>
 
             </div>
@@ -42,6 +41,8 @@
  
 
 <script>
+import axios from 'axios';
+
   export default {  
     el: '#app1',
     components: {
@@ -58,11 +59,14 @@
       login(){
         this.failed = false;        
 
-        if (this.user !== "user" || this.pass !== "pass")
-          this.failed = true;
-        else{
-          this.failed = false;
-        }
+        axios.post('user/login', {email: this.user, pass: this.pass}).then(r => {
+          var success = r.data;
+          if(success === true){
+            this.$router.push('/about');
+          } else {
+            this.failed = true;
+          }          
+        });
       }
     }
   }
@@ -70,8 +74,8 @@
 
 <style scoped>
   .bg-image {
-    height: calc(100vh - 90px);    
-    /* background-image: url('../../assets/background.jpeg') no-repeat center center fixed; */
+    /* height: calc(100vh - 190px);    */
+    height: 100vh;   
     background-repeat: no-repeat;     
     background: url('../../assets/background.jpeg') no-repeat fixed; 
     -webkit-background-size: cover;
@@ -84,10 +88,11 @@
   background: #84fab0;
 
   /* Chrome 10-25, Safari 5.1-6 */
-  background: -webkit-linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5));
-
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   background: linear-gradient(to right, rgba(224, 132, 250, 0.5), rgba(143, 211, 244, 0.5))
   }
-  
+  .card {
+  background-color: rgba(255, 255, 255, 0.66); /* Semi-transparent white background */
+  backdrop-filter: blur(2px); 
+  }
 </style>

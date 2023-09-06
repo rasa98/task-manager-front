@@ -6,6 +6,11 @@ import SignUpView from '../views/SignUpView.vue';
 
 const routes = [
   {
+    path: '/login',
+    name: 'login',    
+    component: LoginView
+  },
+  {
     path: '/',
     name: 'home',
     component: HomeView
@@ -14,12 +19,7 @@ const routes = [
     path: '/about',
     name: 'about',
     component: AboutView
-  },
-  {
-    path: '/login',
-    name: 'login',    
-    component: LoginView
-  },
+  },  
   {
     path: '/signup',
     name: 'signup',    
