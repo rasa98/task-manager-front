@@ -56,17 +56,23 @@ import axios from 'axios';
       }
     },
     methods: {
-      login(){
+      async login(){
         this.failed = false;        
 
-        axios.post('user/login', {email: this.user, pass: this.pass}).then(r => {
-          var success = r.data;
-          if(success === true){
-            this.$router.push('/about');
-          } else {
-            this.failed = true;
-          }          
-        });
+        try{
+            const response = await axios.post('user/login', {email: this.user, pass: this.pass});
+            const userData = response.data;
+            
+            console.log('response for user: ', response);
+            if(userData !== ""){
+              this.$store.dispatch("userModule/login", userData);
+              this.$router.push('/');
+            } else {
+              this.failed = true;
+            }
+        } catch (error) {
+            console.error("Login failed:", error);
+        }
       }
     }
   }

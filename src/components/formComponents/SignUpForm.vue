@@ -70,13 +70,13 @@
     },
     methods: {
       signup(){           
-        this.passFailed = true;
+        this.passFailed = false;
 
         if (this.formData.pass === this.formData.pass2) {
           axios.post('/user', {email: this.formData.user, pass: this.formData.pass}).then(r => {
             var success = r.data;
             if(success === true){
-              this.$router.push('/about');
+              this.$router.push('/login');
             } else {
               alert('Account with that email already exist!!');
             }          

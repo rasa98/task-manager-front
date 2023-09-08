@@ -60,9 +60,10 @@ export default {
   //       }
   //     },
   //   }
-  // },
+  // },  
   mounted() {
-    axios.get("boards/sorted/1").then(r =>  {
+    const boardId = this.$store.getters["getBoardId"];
+    axios.get(`boards/sorted/${boardId}`).then(r =>  {
                 var data = r.data;               
                 this.board = data;
                 this.lists = data.arrayOfLists;

@@ -1,11 +1,24 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
+       
+
+    <div style="width: 16rem; min-width: 16rem;">
+        <FormNew v-if="!flag" :formValues="formValues" @out-of-focus="flipFlag" @text-emitted="addNewBoard"></FormNew>    
+        <button class="btn btn-dark w-100 mx-3" v-show="flag" @click.stop="flipFlag">add new board</button>
+    </div>
+
+
+
+
+
+
+      
+          
+       
+
+      
+    
     <h3>Installed CLI Plugins</h3>
     <ul>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
@@ -32,10 +45,32 @@
 </template>
 
 <script>
+// import DropDown from './utils/DropDown.vue'
+// import Popper from "popper.js"
+import FormNew from '@/components/formComponents/FormNew.vue'
+
 export default {
+  components: { FormNew },
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      flag: true,
+      formValues: {placeHolder: "Board name", title: "New board", buttonName: "Add Board"},
+    }
+  },
+  methods: {
+    flipFlag(){
+      this.flag = !this.flag;
+    },
+    addNewBoard(name){
+      if (name !== ""){
+        add new board code axios...
+      }
+      this.flipFlag();
+    }
   }
 }
 </script>
@@ -56,4 +91,6 @@ li {
 a {
   color: #42b983;
 }
+
+
 </style>

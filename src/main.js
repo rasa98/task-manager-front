@@ -4,5 +4,8 @@ import router from './router'
 import store from './store'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
+import 'vue-select/dist/vue-select.css'; // remove maybe not used
+
+
 
 createApp(App).use(store).use(router).mount('#app')

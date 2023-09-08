@@ -4,18 +4,23 @@
         <a class="navbar-brand" href="#">
             <img alt="Vue logo" src="../assets/logo.png">
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-        </button>
+        </button> -->
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav mr-auto">
-                <router-link to="/" class="nav-item nav-link">Home</router-link>
-                <router-link to="/About" class="nav-item nav-link">About</router-link>
-                                
+                <router-link to="/" class="nav-item nav-link">Home</router-link>                              
+                <!-- <router-link to="/About" class="nav-item nav-link">About</router-link> -->  
+                <div class="menu-item" v-for="b in boards" :key="b.id">
+                    <router-link to="/board" @click="setCurrentBoard(b.id)">{{ b.name }}</router-link>
+                </div>             
+                <!-- <drop-down :title="'My boards'"></drop-down>                        -->
             </div>            
         </div>
+        
+
         <form class="d-flex">
             <router-link to="/login" class="nav-item nav-link">
                 <img alt="Vue logo" src="../assets/login.png">
@@ -31,7 +36,14 @@
 </template>
 
 <script>
+// import DropDown from './utils/DropDown.vue';
+
+
 export default {
+    components: {
+        
+        
+    },
     computed: {
         showNav() {
         // Define the routes where you want to hide the navbar
@@ -40,7 +52,18 @@ export default {
         // Check if the current route is in the list of routes to hide the navbar
         return !routesToHideNavbar.includes(this.$route.name);
         },
-  },
+        userEmail() {
+            return this.$store.getters["user/getEmail"];
+        },
+        boards() {
+            return this.$store.getters["userModule/getBoards"];
+        },        
+    },
+    methods: {
+        setCurrentBoard(id) {
+            this.$store.dispatch("getBoardData", id);
+        }
+    }
 }
 </script>
 
@@ -85,4 +108,5 @@ export default {
     background: rgb(207, 207, 207);
     border-radius: .5rem;
     }
+    
 </style>
