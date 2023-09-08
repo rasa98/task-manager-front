@@ -21,6 +21,10 @@ const state = {
       commit("SET_EMAIL", email);
       commit("SET_BOARDS", boards);
     },
+    updateBoard({ commit }, boards) {     
+      
+      commit("SET_BOARDS", boards);
+    },
   };
   
   const getters = {

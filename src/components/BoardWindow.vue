@@ -26,10 +26,12 @@ export default {
   components: {
     FormNew, ListWindow, draggable
   },
+  props: {    
+    strBoardId: String
+  },
   data: function() {
     return {
-      board: null,
-      lists: [],
+      board: null,      
       formValues: {placeHolder: "List name", title: "Create new list", buttonName: "Add list"},
       flag: true,
       drag: false    
@@ -37,7 +39,15 @@ export default {
   },
   computed: {    
     boardTitle() {
-        return this.board?.name || ""; 
+      return this.board?.name || ""; 
+    },
+    lists() {
+      return this.board?.arrayOfLists || [];
+    }
+  },
+  watch: {
+    strBoardId(/*newValue, oldValue*/) {
+      this.fetchBoardFromApi()
     }
   }
   ,
@@ -62,22 +72,23 @@ export default {
   //   }
   // },  
   mounted() {
-    const boardId = this.$store.getters["getBoardId"];
-    axios.get(`boards/sorted/${boardId}`).then(r =>  {
-                var data = r.data;               
-                this.board = data;
-                this.lists = data.arrayOfLists;
-                console.log("in mounted of BoardedWindow ", data);
-                console.log("lists: ", this.lists);
-            }            
-        ).catch((error) => {
-        // Handle errors here
-        console.error('Error:', error);
-    });
+    this.fetchBoardFromApi();   
   },  
   methods: {    
     flipFlag: function() {
         this.flag = !this.flag;
+    },
+    async fetchBoardFromApi() {      
+      const endpoint = "boards/sorted/" + this.strBoardId;
+      
+      try{
+        const response = await axios.get(endpoint);
+        const b = response.data;
+        this.board = b;
+      } catch (error) {
+          console.error("Board loading failed:", error);
+      }
+      
     },
     addNewList(msg) {
       if (msg !== '') {

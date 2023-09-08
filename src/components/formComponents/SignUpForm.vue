@@ -76,7 +76,7 @@
           axios.post('/user', {email: this.formData.user, pass: this.formData.pass}).then(r => {
             var success = r.data;
             if(success === true){
-              this.$router.push('/login');
+              this.$router.push('/');
             } else {
               alert('Account with that email already exist!!');
             }          

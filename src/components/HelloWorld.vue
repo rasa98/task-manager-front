@@ -6,18 +6,7 @@
     <div style="width: 16rem; min-width: 16rem;">
         <FormNew v-if="!flag" :formValues="formValues" @out-of-focus="flipFlag" @text-emitted="addNewBoard"></FormNew>    
         <button class="btn btn-dark w-100 mx-3" v-show="flag" @click.stop="flipFlag">add new board</button>
-    </div>
-
-
-
-
-
-
-      
-          
-       
-
-      
+    </div> 
     
     <h3>Installed CLI Plugins</h3>
     <ul>
@@ -48,6 +37,7 @@
 // import DropDown from './utils/DropDown.vue'
 // import Popper from "popper.js"
 import FormNew from '@/components/formComponents/FormNew.vue'
+import axios from 'axios'
 
 export default {
   components: { FormNew },
@@ -67,7 +57,18 @@ export default {
     },
     addNewBoard(name){
       if (name !== ""){
-        add new board code axios...
+        const username = this.$store.getters["userModule/getEmail"];
+        const endpoint = `boards/${username}/addBoard`;
+
+        axios.post(endpoint, {name: name}).then(r => {
+            const board = r.data;
+            // add board to global vuex state.
+            var vuexBoards = this.$store.getters["userModule/getBoards"];
+            vuexBoards.push(board);
+            this.$store.dispatch("userModule/updateBoard", vuexBoards);
+            this.$router.push(`/board/${board.id}`);
+          }
+        );// catch....
       }
       this.flipFlag();
     }

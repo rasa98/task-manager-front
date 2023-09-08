@@ -6,12 +6,12 @@ import SignUpView from '../views/SignUpView.vue';
 
 const routes = [
   {
-    path: '/login',
+    path: '/',
     name: 'login',    
     component: LoginView
   },
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: HomeView
   },

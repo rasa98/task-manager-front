@@ -9,7 +9,7 @@
         <transition name="fade" apear>
          <div class="sub-menu" v-if="isOpen">
             <div class="menu-item" v-for="b in boards" :key="b.id">
-              <router-link to="/board" @click="setCurrentBoard(b.id)">{{ b.name }}</router-link>
+              <router-link :to="`/board/${b.id}`" >{{ b.name }}</router-link>
             </div>
             <!-- <div class="menu-item">
               <router-link to="/services/web">Web</router-link>
@@ -42,10 +42,7 @@ export default {
 
     },    
   },
-  methods: {
-        setCurrentBoard(id) {
-            this.$store.dispatch("getBoardData", id);
-        }
+  methods: {       
     }
 }
 </script>

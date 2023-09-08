@@ -64,9 +64,10 @@ import axios from 'axios';
             const userData = response.data;
             
             console.log('response for user: ', response);
+            console.log('store: ', this.$store);
             if(userData !== ""){
               this.$store.dispatch("userModule/login", userData);
-              this.$router.push('/');
+              this.$router.push('/home');
             } else {
               this.failed = true;
             }

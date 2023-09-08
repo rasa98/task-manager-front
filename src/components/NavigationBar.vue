@@ -1,7 +1,7 @@
 <template>
 <div v-if="showNav" id="nav">
     <nav class="navbar navbar-expand-lg mx-5">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="#/home">
             <img alt="Vue logo" src="../assets/logo.png">
         </a>
         <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -11,10 +11,10 @@
 
         <div class="navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav mr-auto">
-                <router-link to="/" class="nav-item nav-link">Home</router-link>                              
+                <router-link to="/home" class="nav-item nav-link">Home</router-link>                              
                 <!-- <router-link to="/About" class="nav-item nav-link">About</router-link> -->  
                 <div class="menu-item" v-for="b in boards" :key="b.id">
-                    <router-link to="/board" @click="setCurrentBoard(b.id)">{{ b.name }}</router-link>
+                    <router-link :to="`/board/${b.id}`">{{ b.name }}</router-link>
                 </div>             
                 <!-- <drop-down :title="'My boards'"></drop-down>                        -->
             </div>            
@@ -22,7 +22,7 @@
         
 
         <form class="d-flex">
-            <router-link to="/login" class="nav-item nav-link">
+            <router-link to="/" class="nav-item nav-link">
                 <img alt="Vue logo" src="../assets/login.png">
             </router-link>
         </form>
@@ -60,9 +60,9 @@ export default {
         },        
     },
     methods: {
-        setCurrentBoard(id) {
-            this.$store.dispatch("getBoardData", id);
-        }
+        // setCurrentBoard(id) {
+        //     this.$store.dispatch("getBoardData", id);
+        // }
     }
 }
 </script>

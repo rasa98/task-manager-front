@@ -9,3 +9,4 @@ import 'vue-select/dist/vue-select.css'; // remove maybe not used
 
 
 createApp(App).use(store).use(router).mount('#app')
+
