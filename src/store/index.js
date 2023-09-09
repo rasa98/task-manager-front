@@ -11,7 +11,14 @@ export default createStore({
   mutations: {    
     SET_CURRENT_BOARD(state, boardId) {
       state.boardId = boardId;
-    },    
+    },
+    initialiseVars(state) {      
+      if (localStorage.getItem('email') !== 'undefined') {
+          state.userModule.email = JSON.parse(localStorage.email)
+          if (localStorage.getItem('boards') !== 'undefined') 
+            state.userModule.boards = JSON.parse(localStorage.boards)
+      }
+    }   
   },
   actions: {
     getBoardData({ commit }, boardData) {
