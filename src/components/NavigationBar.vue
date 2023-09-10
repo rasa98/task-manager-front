@@ -23,7 +23,7 @@
 
         <form class="d-flex">
             <router-link to="/" class="nav-item nav-link">
-                <img alt="Vue logo" src="../assets/login.png">
+                <img alt="user icon" src="../assets/login.png">
             </router-link>
         </form>
         <!-- <form class="d-flex">

@@ -12,11 +12,12 @@ export default createStore({
     SET_CURRENT_BOARD(state, boardId) {
       state.boardId = boardId;
     },
-    initialiseVars(state) {      
-      if (localStorage.getItem('email') !== 'undefined') {
-          state.userModule.email = JSON.parse(localStorage.email)
-          if (localStorage.getItem('boards') !== 'undefined') 
-            state.userModule.boards = JSON.parse(localStorage.boards)
+    initialiseVars(state) { 
+      const ss = window.sessionStorage;    
+      if (ss.getItem('email')) {
+          state.userModule.email = JSON.parse(ss.email)
+          if (ss.getItem('boards')) 
+            state.userModule.boards = JSON.parse(ss.boards)
       }
     }   
   },

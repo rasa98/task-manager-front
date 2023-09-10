@@ -8,8 +8,9 @@ import 'vue-select/dist/vue-select.css'; // remove maybe not used
 
 
 store.subscribe( (mutation, state) => {
-    localStorage.setItem('email', JSON.stringify(state.userModule.email));  
-    localStorage.setItem('boards', JSON.stringify(state.userModule.boards));  
+    const ss = window.sessionStorage;
+    ss.setItem('email', JSON.stringify(state.userModule.email));  
+    ss.setItem('boards', JSON.stringify(state.userModule.boards));  
 })
 
 createApp(App).use(store).use(router).mount('#app')

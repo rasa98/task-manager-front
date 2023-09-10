@@ -33,7 +33,7 @@
 
 
                 <div class="d-inline-block bg-white rounded p-1 mt-3">
-                  <p class="text-center text-muted my-0">Have already an account? <a href="#login"
+                  <p class="text-center text-muted my-0">Have already an account? <a href="#"
                     class="fw-bold text-body"><u>Login here</u></a></p>
                 </div>
 
