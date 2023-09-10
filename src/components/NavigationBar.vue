@@ -93,7 +93,7 @@ export default {
         color: #000000;              
     }
     #nav {                
-        background-color: hsl(83, 100%, 97%);
+        background-color: hsl(0, 0%, 91%);
         backdrop-filter: blur(10px);
         z-index: 9999;
         position: relative;        

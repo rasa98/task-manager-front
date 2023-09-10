@@ -4,7 +4,7 @@
         <TitleEdible style="font-weight: bold;font-size: 1.25rem;" :initialValue="list.name" @name-update="updateListName"></TitleEdible> 
           <draggable class="d-flex flex-column" itemKey="id" :list="taskList" @change="onDragUpdateTasksOrdering" ghost-class="ghost" group="tasks">
             <template #item="{element}">
-              <TaskWindow :taskInfo="element" />                   
+              <TaskWindow :taskInfo="element" @del-tsk="removeTaskFromListLocally" />                   
             </template>
           </draggable>        
     </div>
@@ -68,6 +68,9 @@ export default {
         });       
       }
       this.flipFlag();          
+    },
+    removeTaskFromListLocally(indexToRemove){
+      this.taskList.splice(indexToRemove, 1);
     },
     updateListName(newListName) {
       this.list.name = newListName;
