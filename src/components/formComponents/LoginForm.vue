@@ -67,7 +67,7 @@ import axios from 'axios';
             console.log('store: ', this.$store);
             if(userData !== ""){
               this.$store.dispatch("userModule/login", userData);
-              this.$router.push('/home');
+              this.$router.push('/');
             } else {
               this.failed = true;
             }

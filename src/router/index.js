@@ -3,28 +3,36 @@ import HomeView from '../views/HomeView.vue'
 import BoardView from '../views/BoardView.vue';
 import LoginView from '../views/LoginView.vue';
 import SignUpView from '../views/SignUpView.vue';
+import NotFoundPage from '../views/NotFoundPage.vue';
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'login',    
     component: LoginView
   },
   {
-    path: '/home',
+    path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView, 
+    meta: { requiresAuth: true }
   },
   {
     path: '/board/:boardId',
     name: 'board',
-    component: BoardView
+    component: BoardView,
+    meta: { requiresAuth: true }
   },  
   {
     path: '/signup',
     name: 'signup',    
     component: SignUpView
-  }
+  },
+  { 
+    path: '/:catchAll(.*)',
+    name: 'notFoundPage',
+    component: NotFoundPage 
+  },
 ]
 
 const router = createRouter({

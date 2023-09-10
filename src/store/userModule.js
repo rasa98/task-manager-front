@@ -25,6 +25,11 @@ const state = {
       
       commit("SET_BOARDS", boards);
     },
+    restartUser({ commit },) {
+       
+      commit("SET_EMAIL", null);
+      commit("SET_BOARDS", []);
+    },
   };
   
   const getters = {

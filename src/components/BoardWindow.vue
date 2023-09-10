@@ -1,4 +1,5 @@
-<template>  
+<template> 
+ 
     <h1>{{ boardTitle }}</h1>
       <draggable class="d-flex flex-row m-2" :list="lists" itemKey="id" ghost-class="ghost" @end="onDragUpdateListsOrdering">
             <template #item="{element}">
@@ -11,6 +12,7 @@
               </div>
             </template>           
       </draggable>
+
 </template>
 
 <script>  
@@ -133,6 +135,7 @@ export default {
 </script>
 
 <style scoped>
+ 
   button {
     width: 16rem;
     height: 3rem;

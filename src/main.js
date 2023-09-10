@@ -4,7 +4,8 @@ import router from './router'
 import store from './store'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
-import 'vue-select/dist/vue-select.css'; // remove maybe not used
+import { DropDown } from 'vue3-dropper';
+import 'vue3-dropper/dist/base.css';
 
 
 store.subscribe( (mutation, state) => {
@@ -13,5 +14,24 @@ store.subscribe( (mutation, state) => {
     ss.setItem('boards', JSON.stringify(state.userModule.boards));  
 })
 
-createApp(App).use(store).use(router).mount('#app')
+router.beforeEach((to, from, next) => {
+    // Check if the route requires authentication
+    if (to.meta.requiresAuth) {
+      // Check if the user is authenticated (you can implement your own logic here)
+      const isAuthenticated = store.getters["userModule/getEmail"] !== null;
+  
+      if (!isAuthenticated) {
+        // Redirect to the login page
+        next('/login');
+      } else {
+        // Continue to the restricted page
+        next();
+      }
+    } else {
+      // For routes that don't require authentication, proceed normally
+      next();
+    }
+  });
+
+createApp(App).component('DropDown', DropDown).use(store).use(router).mount('#app')
 

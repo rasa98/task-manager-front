@@ -1,35 +1,32 @@
 <template>
 <div v-if="showNav" id="nav">
     <nav class="navbar navbar-expand-lg mx-5">
-        <a class="navbar-brand" href="#/home">
+        <a href="#/">
             <img alt="Vue logo" src="../assets/logo.png">
-        </a>
-        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button> -->
+        </a>       
 
         <div class="navbar-collapse" id="navbarSupportedContent">
-            <div class="navbar-nav mr-auto">
-                <router-link to="/home" class="nav-item nav-link">Home</router-link>                              
-                <!-- <router-link to="/About" class="nav-item nav-link">About</router-link> -->  
-                <div class="menu-item" v-for="b in boards" :key="b.id">
-                    <router-link :to="`/board/${b.id}`">{{ b.name }}</router-link>
-                </div>             
-                <!-- <drop-down :title="'My boards'"></drop-down>                        -->
+            <div class="navbar-nav xy-margin">
+                <router-link to="/" class="nav-item nav-link">Home</router-link>                              
+                
+                <DropDown :bottom="true" label="All boards" theme="auto">
+                    <div v-for="b in boards" :key="b.id">
+                        <router-link class="nav-link" :to="`/board/${b.id}`">{{ b.name }}</router-link>
+                    </div>                
+                </DropDown>
+
             </div>            
         </div>
         
+        <!-- <p class="navbar-brand">user: </p> -->
+        <DropDown :bottom="true" :label="userEmail" theme="auto">
+            <router-link  class="nav-link" to="/login" @click="removeSessionStorage" >
+                log out
+            </router-link>                
+        </DropDown>
+        
 
-        <form class="d-flex">
-            <router-link to="/" class="nav-item nav-link">
-                <img alt="user icon" src="../assets/login.png">
-            </router-link>
-        </form>
-        <!-- <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-dark" type="submit">Search</button>
-        </form> -->
+    
     </nav>
  </div>
   <router-view/>
@@ -47,13 +44,13 @@ export default {
     computed: {
         showNav() {
         // Define the routes where you want to hide the navbar
-        const routesToHideNavbar = ['login', 'signup']; // Replace with your route names
+        const routesToHideNavbar = ['login', 'signup', 'notFoundPage']; // Replace with your route names
 
         // Check if the current route is in the list of routes to hide the navbar
         return !routesToHideNavbar.includes(this.$route.name);
         },
         userEmail() {
-            return this.$store.getters["user/getEmail"];
+            return this.$store.getters["userModule/getEmail"];
         },
         boards() {
             return this.$store.getters["userModule/getBoards"];
@@ -63,32 +60,52 @@ export default {
         // setCurrentBoard(id) {
         //     this.$store.dispatch("getBoardData", id);
         // }
+        removeSessionStorage(){
+            this.$store.dispatch('userModule/restartUser');
+            window.sessionStorage.clear();
+        }
     }
 }
 </script>
 
-<style scoped>
+<style scoped>    
+    .xy-margin > *{
+        margin-right: 0.5rem;
+        margin-left: 0.5rem;
+    }
+    .dropper-root {         
+        z-index: 5001 !important;             
+    }
+    .dropper-root>.list-group {
+        z-index: 5001 !important;  
+           
+    }
+    .dropper-root>.list-group>* {
+        text-align: center;  
+        z-index: 5001 !important;   
+        background-color: rgb(237, 237, 237) ;            
+    }
+    .dropper-root>.list-group>*:hover {
+         
+        background-color: rgb(220, 220, 220) ;            
+    }
     .nav-link {
-        color: #000000;
-        font-size: 28px;        
+        color: #000000;              
     }
     #nav {                
         background-color: hsl(83, 100%, 97%);
-        backdrop-filter: blur(10px);        
+        backdrop-filter: blur(10px);
+        z-index: 9999;
+        position: relative;        
     }
     /* .transparent-navbar {
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
-    min-height: 0 !important;
-  } */
-
-    nav a {
-    font-weight: bold;
-    color: #cb2c2c;   
+    min-height: 0 !inavbar-brand;   
     /* font-family: Avenir, Helvetica, Arial, sans-serif;   */
-    }
+    /* }, */
     img {
     width: 50px;
     height: auto; 
