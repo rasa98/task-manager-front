@@ -1,13 +1,13 @@
 <template>
     <div class="my-2">
-        <div class="card bg-light" style="width: auto;">            
+        <div class="card bg-light" style="width: auto;" :class="{ 'border-success border-3': this.task.done }">            
             <div class="card-body custom" @mouseenter="() => flag=true" @mouseleave="() => flag=false">                
                <TitleEdible style="box-shadow: none;" :initialValue="task.title" @name-update="updateTitle"></TitleEdible>
-               <button class="btn btn-secondary done-btn" v-show="flag" @click="none">
-                    <img src="../assets/pencil.svg">                        
+               <button class="btn btn-secondary done-btn" v-show="flag" @click="markTaskAsDone">
+                    <img src="../assets/done.png" style="width: 15px;height:15px;">                        
                </button> 
                <button class="btn btn-secondary del-btn" v-show="flag" @click="deleteTask">
-                    <img src="../assets/del-icon.png" style="width: 16px;height:auto;">                        
+                    <img src="../assets/del-icon.png" style="width: 15px;height:15px;">                        
                </button>               
             </div>
         </div>
@@ -37,16 +37,31 @@ export default {
   },
   methods: {
     updateTitle(newTaskTitle){      
-      axios.put(`tasks`, 
-        {title: newTaskTitle, id: this.task.id}) 
+      this.updateTask({title: newTaskTitle});
+    },
+    updateTask(taskObject){
+      taskObject.id = this.task.id;
+      axios.put(`tasks`, taskObject) 
           .then(r => {
             var updatedTask = r.data;
-            console.log("updated task title in backend", updatedTask);  
-            this.task.title = newTaskTitle; // if successful -> update locally task                       
+            console.log("updated task", updatedTask);  
+            this.updateLocallyTask(updatedTask); // if successful -> update locally task                       
           }).catch(error => {
           // Handle errors
           console.error('PUT request error:', error);
       });
+    },
+    updateLocallyTask(tsk){
+      const t = this.task;
+      // t.id = tsk.id; id nikad ne menjam
+      t.title = tsk.title;
+      t.taskOrder = tsk.taskOrder;
+      t.done = tsk.done;
+      t.parentList = tsk.parentList;
+    },
+    markTaskAsDone(){
+      console.log('current value of done: ', !this.task.done);
+      this.updateTask({done: !this.task.done});
     },
     deleteTask(){
       axios.delete(`tasks/${this.task.id}`).then(() => {
@@ -60,14 +75,12 @@ export default {
 }
 </script>
 
-<style scoped>    
-    /* p {
-        text-align: left;
-    } */
+<style scoped>  
+    
     button {
       position: absolute;
       opacity: 0.65; 
-      right: 0;
+      right: 0;      
       background-color: rgb(159, 157, 157); 
       border-color: rgb(108, 108, 108);
     }
@@ -83,4 +96,8 @@ export default {
     .custom:hover {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     }
+    .task-done {
+      border-color: 2px #28a745 !important; /* Green border color for done tasks */
+    }
+    
 </style>

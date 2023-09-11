@@ -3,7 +3,7 @@
     <h1>{{ boardTitle }}</h1>
       <draggable class="d-flex flex-row m-2" :list="lists" itemKey="id" ghost-class="ghost" @end="onDragUpdateListsOrdering">
             <template #item="{element}">
-              <ListWindow class="m-2" :listInfo="element" />                 
+              <ListWindow class="m-2" :listInfo="element" @del-lst="removeLocalList" />                 
             </template> 
             <template #footer> 
               <div class="m-2" style="width: 16rem; min-width: 16rem;">                               
@@ -107,6 +107,9 @@ export default {
         });                     
       }
       this.flipFlag();
+    },
+    removeLocalList(indexToRemove){
+      this.lists.splice(indexToRemove, 1);
     },
     onDragUpdateListsOrdering(evt) {      
       const { oldIndex, newIndex } = evt;

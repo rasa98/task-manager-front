@@ -1,12 +1,15 @@
 <template>
   <div class="card" style="width: 16rem; min-width: 16rem;">
-    <div class="card-body custom">        
+    <div class="card-body custom" @mouseenter="() => btnShow=true" @mouseleave="() => btnShow=false">        
         <TitleEdible style="font-weight: bold;font-size: 1.25rem;" :initialValue="list.name" @name-update="updateListName"></TitleEdible> 
           <draggable class="d-flex flex-column" itemKey="id" :list="taskList" @change="onDragUpdateTasksOrdering" ghost-class="ghost" group="tasks">
             <template #item="{element}">
               <TaskWindow :taskInfo="element" @del-tsk="removeTaskFromListLocally" />                   
             </template>
-          </draggable>        
+          </draggable>
+          <button class="btn btn-secondary del-btn" v-show="btnShow" @click="deleteThisList">
+              <img src="../assets/del-icon.png" style="width: 15px;height:15px;">                        
+          </button>        
     </div>
     <div class="card-footer">
         <FormNew v-if="!flag" :formValues="formValues" @out-of-focus="flipFlag" @text-emitted="addNewTask"></FormNew>
@@ -38,7 +41,8 @@ export default {
       list: this.listInfo, 
       formValues: {placeHolder: "Task info..", title: "New task", buttonName: "Add Task"},
       flag: true,
-      drag: false   
+      drag: false,
+      btnShow: false   
     }
   },
   computed: {
@@ -71,6 +75,14 @@ export default {
     },
     removeTaskFromListLocally(indexToRemove){
       this.taskList.splice(indexToRemove, 1);
+    },
+    deleteThisList(){
+      axios.delete(`lists/${this.list.id}`).then(() => {
+        this.$emit('del-lst', this.list.listOrder); 
+      }).catch(error => {
+          // Handle errors
+          console.error('DEL list request error:', error);
+      });
     },
     updateListName(newListName) {
       this.list.name = newListName;
@@ -115,7 +127,7 @@ export default {
       for (let i = start; i <= end; i++) {
         t = this.taskList[i];
         t.taskOrder = i; // local change
-        arrOfT.push({ id: t.id, taskOrder: t.taskOrder, title: t.title}); // added title za svaki slucaj..:D
+        arrOfT.push({ id: t.id, taskOrder: t.taskOrder}); // added title za svaki slucaj..:D
       }
       const response = await axios.put("tasks/all", arrOfT);
       console.log("After db tasks update their order: ", response.data);
@@ -132,7 +144,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped>  
+  .del-btn {  
+    position: absolute;
+    opacity: 0.65; 
+    right: 0;      
+    background-color: rgb(159, 157, 157); 
+    border-color: rgb(108, 108, 108);      
+    top: 0;              
+  }
   .custom {
       background-color: rgb(229, 229, 229);
       height: auto;
