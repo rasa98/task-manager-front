@@ -1,6 +1,11 @@
 <template> 
- 
-    <h1>{{ boardTitle }}</h1>
+    <div class="d-flex justify-content-center align-items-center mx-2 my-2">
+      <!-- <h1>{{ boardTitle }}</h1> -->
+      <TitleEdible style="font-weight: bold;font-size: 1.25rem;" :initialValue="boardTitle" @name-update="updateBoardName"></TitleEdible>      
+      <button class="btn btn-secondary del-btn mx-4" @click="deleteThisBoard">
+          <img src="../assets/del-icon.png" style="max-width: 100%; max-height: 100%;">                        
+      </button>
+    </div>
       <draggable class="d-flex flex-row m-2" :list="lists" itemKey="id" ghost-class="ghost" @end="onDragUpdateListsOrdering">
             <template #item="{element}">
               <ListWindow class="m-2" :listInfo="element" @del-lst="removeLocalList" />                 
@@ -18,6 +23,7 @@
 <script>  
 import ListWindow from '@/components/ListWindow.vue'
 import FormNew from '@/components/formComponents/FormNew.vue'
+import TitleEdible from './formComponents/TitleEdible.vue'
 import draggable from 'vuedraggable'
 import axios from 'axios'
 
@@ -26,7 +32,7 @@ import axios from 'axios'
 export default {
   name: "BoardWindow",
   components: {
-    FormNew, ListWindow, draggable
+    FormNew, ListWindow, draggable, TitleEdible
   },
   props: {    
     strBoardId: String
@@ -79,6 +85,31 @@ export default {
   methods: {    
     flipFlag: function() {
         this.flag = !this.flag;
+    },
+    deleteThisBoard(){      
+      const id = this.board.id;
+      axios.delete(`boards/${id}`).then(() =>  {                                                     
+                  console.log("After deleting board");
+                  var boards = this.$store.getters["userModule/getBoards"]; 
+                  const filteredBoards = boards.filter(board => board.id !== id);
+                  this.$store.dispatch("userModule/updateBoard", filteredBoards); //updates navbar
+                  this.$router.push("/"); // go to home to make new or open existing board
+              }            
+          ).catch((error) => {
+          // Handle errors here
+          console.error('Error deleting board:', error);
+      });    
+    },
+    updateBoardName(newName){
+      this.board.name = newName;
+      axios.put(`boards`, {name: newName, id: this.board.id}) 
+            .then(r => {
+              var updatedBoard = r.data;
+              console.log("updated new board name in backend", updatedBoard);              
+            }).catch(error => {
+            // Handle errors
+            console.error('PUT board rename request error:', error);
+        });  
     },
     async fetchBoardFromApi() {      
       const endpoint = "boards/sorted/" + this.strBoardId;
@@ -150,5 +181,14 @@ export default {
   } 
   .d-flex {
     align-items: start;
+  } 
+  .del-btn {  
+      /* position: absolute; */
+      /* opacity: 0.5;  */
+      /* right: 0;       */
+      background-color: rgb(226, 226, 226);         
+      border: none;
+      width: 52px;height:52px;
+      /* top: 0;               */
   } 
 </style>

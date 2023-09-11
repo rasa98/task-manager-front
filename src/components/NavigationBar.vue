@@ -10,8 +10,8 @@
                 <router-link to="/" class="nav-item nav-link">Home</router-link>                              
                 
                 <DropDown :bottom="true" label="All boards" theme="auto">
-                    <div v-for="b in boards" :key="b.id">
-                        <router-link class="nav-link" :to="`/board/${b.id}`">{{ b.name }}</router-link>
+                    <div v-for="b in boards" :key="b.id" style="position: relative;">
+                        <router-link class="nav-link" :to="`/board/${b.id}`">{{ b.name }}</router-link>                        
                     </div>                
                 </DropDown>
 
@@ -43,11 +43,11 @@ export default {
     },
     computed: {
         showNav() {
-        // Define the routes where you want to hide the navbar
-        const routesToHideNavbar = ['login', 'signup', 'notFoundPage']; // Replace with your route names
+            // Define the routes where you want to hide the navbar
+            const routesToHideNavbar = ['login', 'signup', 'notFoundPage']; // Replace with your route names
 
-        // Check if the current route is in the list of routes to hide the navbar
-        return !routesToHideNavbar.includes(this.$route.name);
+            // Check if the current route is in the list of routes to hide the navbar
+            return !routesToHideNavbar.includes(this.$route.name);
         },
         userEmail() {
             return this.$store.getters["userModule/getEmail"];
@@ -56,7 +56,7 @@ export default {
             return this.$store.getters["userModule/getBoards"];
         },        
     },
-    methods: {
+    methods: {        
         // setCurrentBoard(id) {
         //     this.$store.dispatch("getBoardData", id);
         // }
@@ -68,7 +68,7 @@ export default {
 }
 </script>
 
-<style scoped>    
+<style scoped>       
     .xy-margin > *{
         margin-right: 0.5rem;
         margin-left: 0.5rem;
