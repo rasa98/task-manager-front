@@ -6,7 +6,7 @@
                <button class="btn btn-secondary done-btn" v-show="flag" @click="markTaskAsDone">
                     <img src="../assets/done.png" style="width: 15px;height:15px;">                        
                </button> 
-               <button class="btn btn-secondary del-btn" v-show="flag" @click="deleteTask">
+               <button class="btn btn-secondary del-btn" v-show="flag" @click="showDelDialog">
                     <img src="../assets/del-icon.png" style="width: 15px;height:15px;">                        
                </button>               
             </div>
@@ -62,6 +62,26 @@ export default {
     markTaskAsDone(){
       console.log('current value of done: ', !this.task.done);
       this.updateTask({done: !this.task.done});
+    },
+    showDelDialog(){
+      this.$confirm(
+        {
+          message: 'Are you sure you wanna delete this task?',
+          button: {
+            no: 'No',
+            yes: 'Yes'
+          },
+          /**
+          * Callback Function
+          * @param {Boolean} confirm
+          */
+          callback: confirm => {
+            if (confirm) {
+              this.deleteTask();
+            }
+          }
+        }
+      )
     },
     deleteTask(){
       axios.delete(`tasks/${this.task.id}`).then(() => {

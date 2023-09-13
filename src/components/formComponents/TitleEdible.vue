@@ -61,11 +61,18 @@ export default {
 </script>
 
 <style scoped>
-.custom {
-    /* font-size: 1.25rem; Increase font size */
-    /* font-weight: bold;  */
-    background-color: inherit;
-    /* margin-bottom: 0.5rem;   */
+
+.form-control.custom {
+  /* Add your common styling here */
+  padding: 10px;
+  margin: 5px;
+  /* text-align: center;   */
+  /* white-space: nowrap; */
+  /* overflow: hidden; */
+  /* width: auto; */
+  /* max-width: 100%; */
+  /* text-overflow: ellipsis; */
+  /* Other styles as needed */
 }
 p {
   cursor: pointer;

@@ -1,8 +1,8 @@
 <template> 
     <div class="d-flex justify-content-center align-items-center mx-2 my-2">
       <!-- <h1>{{ boardTitle }}</h1> -->
-      <TitleEdible style="font-weight: bold;font-size: 1.25rem;" :initialValue="boardTitle" @name-update="updateBoardName"></TitleEdible>      
-      <button class="btn btn-secondary del-btn mx-4" @click="deleteThisBoard">
+      <TitleEdible class="myTitle" :initialValue="boardTitle" @name-update="updateBoardName"></TitleEdible>      
+      <button class="btn btn-secondary del-btn mx-4" @click="showDelDialog">
           <img src="../assets/del-icon.png" style="max-width: 100%; max-height: 100%;">                        
       </button>
     </div>
@@ -85,6 +85,26 @@ export default {
   methods: {    
     flipFlag: function() {
         this.flag = !this.flag;
+    },
+    showDelDialog(){
+      this.$confirm(
+        {
+          message: 'Are you sure you wanna delete this board?',
+          button: {
+            no: 'No',
+            yes: 'Yes'
+          },
+          /**
+          * Callback Function
+          * @param {Boolean} confirm
+          */
+          callback: confirm => {
+            if (confirm) {
+              this.deleteThisBoard();
+            }
+          }
+        }
+      )
     },
     deleteThisBoard(){      
       const id = this.board.id;
@@ -169,6 +189,12 @@ export default {
 </script>
 
 <style scoped>
+  .myTitle{
+    font-weight: bold;
+    font-size: 1.25rem;
+    max-width: 20rem;
+     width: auto;
+  }
  
   button {
     width: 16rem;

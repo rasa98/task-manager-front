@@ -6,6 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 import { DropDown } from 'vue3-dropper';
 import 'vue3-dropper/dist/base.css';
+import Vue3ConfirmDialog from 'vue3-confirm-dialog';
+import 'vue3-confirm-dialog/style';
 
 
 store.subscribe( (mutation, state) => {
@@ -33,5 +35,9 @@ router.beforeEach((to, from, next) => {
     }
   });
 
-createApp(App).component('DropDown', DropDown).use(store).use(router).mount('#app')
+const app = createApp(App);
+app.component('DropDown', DropDown);
+app.use(Vue3ConfirmDialog).use(store).use(router).mount('#app');
+app.component('vue3-confirm-dialog', Vue3ConfirmDialog.default);
+
 

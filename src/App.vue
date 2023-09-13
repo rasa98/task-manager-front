@@ -15,6 +15,7 @@
       <component :is="Component" />
     </keep-alive>
   </router-view> -->
+  <vue3-confirm-dialog></vue3-confirm-dialog>
 </template>
 
 <script>

@@ -7,7 +7,7 @@
               <TaskWindow :taskInfo="element" @del-tsk="removeTaskFromListLocally" />                   
             </template>
           </draggable>
-          <button class="btn btn-secondary del-btn" v-show="btnShow" @click="deleteThisList">
+          <button class="btn btn-secondary del-btn" v-show="btnShow" @click="showDelDialog">
               <img src="../assets/del-icon.png" style="width: 15px;height:15px;">                        
           </button>        
     </div>
@@ -75,6 +75,26 @@ export default {
     },
     removeTaskFromListLocally(indexToRemove){
       this.taskList.splice(indexToRemove, 1);
+    },
+    showDelDialog(){
+      this.$confirm(
+        {
+          message: 'Are you sure you wanna delete this list?',
+          button: {
+            no: 'No',
+            yes: 'Yes'
+          },
+          /**
+          * Callback Function
+          * @param {Boolean} confirm
+          */
+          callback: confirm => {
+            if (confirm) {
+              this.deleteThisList();
+            }
+          }
+        }
+      )
     },
     deleteThisList(){
       axios.delete(`lists/${this.list.id}`).then(() => {
