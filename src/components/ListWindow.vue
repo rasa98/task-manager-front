@@ -3,8 +3,8 @@
     <div class="card-body custom" @mouseenter="() => btnShow=true" @mouseleave="() => btnShow=false">        
         <TitleEdible style="font-weight: bold;font-size: 1.25rem;" :initialValue="list.name" @name-update="updateListName"></TitleEdible> 
           <draggable class="d-flex flex-column" itemKey="id" :list="taskList" @change="onDragUpdateTasksOrdering" ghost-class="ghost" group="tasks">
-            <template #item="{element}">
-              <TaskWindow :taskInfo="element" @del-tsk="removeTaskFromListLocally" />                   
+            <template #item="{element, index}">
+              <TaskWindow :taskInfo="element" @del-tsk="removeTaskFromListLocally(index)" />                   
             </template>
           </draggable>
           <button class="btn btn-secondary del-btn" v-show="btnShow" @click="showDelDialog">
@@ -73,8 +73,9 @@ export default {
       }
       this.flipFlag();          
     },
-    removeTaskFromListLocally(indexToRemove){
-      this.taskList.splice(indexToRemove, 1);
+    removeTaskFromListLocally(idToRemove){
+      console.log("before  remove localy index to remove", idToRemove);
+      this.taskList.splice(idToRemove, 1);
     },
     showDelDialog(){
       this.$confirm(
@@ -98,7 +99,7 @@ export default {
     },
     deleteThisList(){
       axios.delete(`lists/${this.list.id}`).then(() => {
-        this.$emit('del-lst', this.list.listOrder); 
+        this.$emit('del-lst'); 
       }).catch(error => {
           // Handle errors
           console.error('DEL list request error:', error);

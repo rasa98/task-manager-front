@@ -10,6 +10,14 @@ const state = {
     SET_BOARDS(state, boards) {
       state.boards = boards;
     },
+    updateBoardName(state, { index, newName }) {
+      // Check if the index is valid
+      if (index >= 0 && index < state.boards.length) {
+        // Update the name of the board at the specified index
+        console.log(newName);
+        state.boards[index].name = newName;
+      }
+    },
   };
   
   const actions = {

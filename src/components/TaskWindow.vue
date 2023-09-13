@@ -77,6 +77,7 @@ export default {
           */
           callback: confirm => {
             if (confirm) {
+              console.log("before calling delete:");
               this.deleteTask();
             }
           }
@@ -85,7 +86,8 @@ export default {
     },
     deleteTask(){
       axios.delete(`tasks/${this.task.id}`).then(() => {
-        this.$emit('del-tsk', this.task.taskOrder); 
+        console.log("before emiting");
+        this.$emit('del-tsk'); // taskOrder se ne update-uje ostaje rastuci poredak
       }).catch(error => {
           // Handle errors
           console.error('DEL task request error:', error);

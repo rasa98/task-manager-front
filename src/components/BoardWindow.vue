@@ -2,13 +2,13 @@
     <div class="d-flex justify-content-center align-items-center mx-2 my-2">
       <!-- <h1>{{ boardTitle }}</h1> -->
       <TitleEdible class="myTitle" :initialValue="boardTitle" @name-update="updateBoardName"></TitleEdible>      
-      <button class="btn btn-secondary del-btn mx-4" @click="showDelDialog">
+      <button class="btn btn-secondary del-btn mx-4" @click="showDelDialog(board.id)">
           <img src="../assets/del-icon.png" style="max-width: 100%; max-height: 100%;">                        
       </button>
     </div>
       <draggable class="d-flex flex-row m-2" :list="lists" itemKey="id" ghost-class="ghost" @end="onDragUpdateListsOrdering">
-            <template #item="{element}">
-              <ListWindow class="m-2" :listInfo="element" @del-lst="removeLocalList" />                 
+            <template #item="{element, index}">
+              <ListWindow class="m-2" :listInfo="element" @del-lst="removeLocalList(index)" />                 
             </template> 
             <template #footer> 
               <div class="m-2" style="width: 16rem; min-width: 16rem;">                               
@@ -26,6 +26,7 @@ import FormNew from '@/components/formComponents/FormNew.vue'
 import TitleEdible from './formComponents/TitleEdible.vue'
 import draggable from 'vuedraggable'
 import axios from 'axios'
+import { showDelDialogAndDelete } from './util/delBoardUtil';
 
 
 
@@ -86,42 +87,53 @@ export default {
     flipFlag: function() {
         this.flag = !this.flag;
     },
-    showDelDialog(){
-      this.$confirm(
-        {
-          message: 'Are you sure you wanna delete this board?',
-          button: {
-            no: 'No',
-            yes: 'Yes'
-          },
-          /**
-          * Callback Function
-          * @param {Boolean} confirm
-          */
-          callback: confirm => {
-            if (confirm) {
-              this.deleteThisBoard();
-            }
-          }
-        }
-      )
+    async showDelDialog(boardId){  
+      await showDelDialogAndDelete.call(this, boardId);   
+      // this.$confirm(
+      //   {
+      //     message: 'Are you sure you wanna delete this board?',
+      //     button: {
+      //       no: 'No',
+      //       yes: 'Yes'
+      //     },
+      //     /**
+      //     * Callback Function
+      //     * @param {Boolean} confirm
+      //     */
+      //     callback: confirm => {
+      //       if (confirm) {
+      //         this.deleteThisBoard(boardId);
+      //       }
+      //     }
+      //   }
+      // )
     },
-    deleteThisBoard(){      
-      const id = this.board.id;
-      axios.delete(`boards/${id}`).then(() =>  {                                                     
-                  console.log("After deleting board");
-                  var boards = this.$store.getters["userModule/getBoards"]; 
-                  const filteredBoards = boards.filter(board => board.id !== id);
-                  this.$store.dispatch("userModule/updateBoard", filteredBoards); //updates navbar
-                  this.$router.push("/"); // go to home to make new or open existing board
-              }            
-          ).catch((error) => {
-          // Handle errors here
-          console.error('Error deleting board:', error);
-      });    
-    },
+    // deleteThisBoard(id){      
+    //   // const id = this.board.id;
+    //   axios.delete(`boards/${id}`).then(() =>  {                                                     
+    //               console.log("After deleting board");
+    //               var boards = this.$store.getters["userModule/getBoards"]; 
+    //               const filteredBoards = boards.filter(board => board.id !== id);
+    //               this.$store.dispatch("userModule/updateBoard", filteredBoards); //updates navbar
+    //               this.$router.push("/"); // go to home to make new or open existing board
+    //           }            
+    //       ).catch((error) => {
+    //       // Handle errors here
+    //       console.error('Error deleting board:', error);
+    //   });    
+    // },
     updateBoardName(newName){
-      this.board.name = newName;
+      this.board.name = newName; // this is locally for this comp, but also need global vuex for home apge and navbar
+      const boardIdToUpdate = this.board.id;      
+
+      const index = this.$store.getters['userModule/getBoards'].findIndex((board) => board.id === boardIdToUpdate);
+
+      if (index !== -1) {
+        // If the board with the target ID is found, update its name
+        console.log('new name:', newName);
+        this.$store.commit('userModule/updateBoardName', {index, newName});
+      }
+
       axios.put(`boards`, {name: newName, id: this.board.id}) 
             .then(r => {
               var updatedBoard = r.data;
@@ -131,7 +143,16 @@ export default {
             console.error('PUT board rename request error:', error);
         });  
     },
-    async fetchBoardFromApi() {      
+    async fetchBoardFromApi() {     
+      // check if id in route parameter ==  one of the board ids of user
+      const allBoardIds = this.$store.getters["userModule/getBoards"];
+      if(!allBoardIds.map((board) => board.id.toString()).includes(this.strBoardId)) {
+        console.log("That page doesnt exist!!!");
+        this.$router.push('/error404');
+        return;
+      }
+      // ---------------------------------------------------------------
+
       const endpoint = "boards/sorted/" + this.strBoardId;
       
       try{

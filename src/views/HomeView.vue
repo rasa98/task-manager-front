@@ -1,44 +1,41 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <p>Ovde je data: {{x}} </p>
-    <p>Ovde je computed: {{myProp}} </p>
-    <input v-model="myProp" />
-    <button @click="doThis">klik</button>
+  <div class="m-4">
+    <div class="d-flex col-12">
+      <div class="col-4">
+        <img alt="Vue logo" src="../assets/logo.png" class="fixed-size-image">
+      </div>
+      <HomeWindow class="col-8" msg="My boards:"/>
+    </div>           
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import HomeWindow from '@/components/HomeWindow.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    HelloWorld
+    HomeWindow
   },
   data: function() {
-    return {
-      x: "Marko krasic Jelic",
-      y: "Jedi govna"   
+    return {      
     }
   },
   methods: {
-    doThis() {
-      this.myProp = "Niko Nije Kao Ti";
-    }
+    
   },
   computed: {
-    myProp: {
-      get() {
-        var names = this.x.split(' ');
-        return names[0] + " " + names[names.length - 1];
-      },
-      set(newVal) {
-        this.x += newVal;        
-      }
-    }
+    
   }
 }
 </script>
+
+<style scoped>
+.fixed-size-image {
+  max-width: 100%; /* Ensure the image doesn't exceed the width of the parent div */
+  max-height: 35rem; /* Set a maximum height equivalent to 8 rows */
+  width: auto; /* Maintain the aspect ratio */
+  height: auto; /* Maintain the aspect ratio */
+}
+</style>
