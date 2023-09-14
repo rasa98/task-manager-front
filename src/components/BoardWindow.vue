@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-center align-items-center mx-2 my-2">
       <!-- <h1>{{ boardTitle }}</h1> -->
       <TitleEdible class="myTitle" :initialValue="boardTitle" @name-update="updateBoardName"></TitleEdible>      
-      <button class="btn btn-secondary del-btn mx-4" @click="showDelDialog(board.id)">
+      <button class="btn btn-secondary del-btn mx-4" v-tooltip.right="'delete this board'" @click="showDelDialog(board.id)">
           <img src="../assets/del-icon.png" style="max-width: 100%; max-height: 100%;">                        
       </button>
     </div>

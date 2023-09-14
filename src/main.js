@@ -8,6 +8,8 @@ import { DropDown } from 'vue3-dropper';
 import 'vue3-dropper/dist/base.css';
 import Vue3ConfirmDialog from 'vue3-confirm-dialog';
 import 'vue3-confirm-dialog/style';
+import FloatingVue from 'floating-vue';
+import 'floating-vue/dist/style.css'
 
 
 store.subscribe( (mutation, state) => {
@@ -19,7 +21,7 @@ store.subscribe( (mutation, state) => {
 router.beforeEach((to, from, next) => {
     // Check if the route requires authentication
     if (to.meta.requiresAuth) {
-      // Check if the user is authenticated (you can implement your own logic here)
+      // Check if the user is authenticated 
       const isAuthenticated = store.getters["userModule/getEmail"] !== null;
   
       if (!isAuthenticated) {
@@ -37,7 +39,7 @@ router.beforeEach((to, from, next) => {
 
 const app = createApp(App);
 app.component('DropDown', DropDown);
-app.use(Vue3ConfirmDialog).use(store).use(router).mount('#app');
+app.use(Vue3ConfirmDialog).use(FloatingVue).use(store).use(router).mount('#app');
 app.component('vue3-confirm-dialog', Vue3ConfirmDialog.default);
 
 

@@ -7,7 +7,7 @@
               <TaskWindow :taskInfo="element" @del-tsk="removeTaskFromListLocally(index)" />                   
             </template>
           </draggable>
-          <button class="btn btn-secondary del-btn" v-show="btnShow" @click="showDelDialog">
+          <button class="btn btn-secondary del-btn" v-tooltip.top="'delete this list'" v-show="btnShow" @click="showDelDialog">
               <img src="../assets/del-icon.png" style="width: 15px;height:15px;">                        
           </button>        
     </div>

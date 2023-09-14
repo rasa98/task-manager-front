@@ -1,21 +1,6 @@
-<template>
-  <!-- <nav class="navbar navbar-light">
-    <div class="d-flex flex-row mx-5">      
-      <router-link class="mx-5" to="/">Home</router-link> 
-      <router-link class="mx-5" to="/about">About</router-link> 
-      <router-link class="mx-5" to="/login">Login</router-link>
-    </div>    
-  </nav>
-  <router-view /> -->
+<template>  
   <navigation-bar/>
-
-
-  <!-- <router-view v-slot="{ Component }">
-    <keep-alive>
-      <component :is="Component" />
-    </keep-alive>
-  </router-view> -->
-  <vue3-confirm-dialog></vue3-confirm-dialog>
+  <vue3-confirm-dialog />
 </template>
 
 <script>

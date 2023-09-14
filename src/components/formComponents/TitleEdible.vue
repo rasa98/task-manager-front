@@ -63,16 +63,8 @@ export default {
 <style scoped>
 
 .form-control.custom {
-  /* Add your common styling here */
   padding: 10px;
-  margin: 5px;
-  /* text-align: center;   */
-  /* white-space: nowrap; */
-  /* overflow: hidden; */
-  /* width: auto; */
-  /* max-width: 100%; */
-  /* text-overflow: ellipsis; */
-  /* Other styles as needed */
+  margin: 5px; 
 }
 p {
   cursor: pointer;

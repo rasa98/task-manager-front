@@ -3,10 +3,10 @@
         <div class="card bg-light" style="width: auto;" :class="{ 'border-success border-3': this.task.done }">            
             <div class="card-body custom" @mouseenter="() => flag=true" @mouseleave="() => flag=false">                
                <TitleEdible style="box-shadow: none;" :initialValue="task.title" @name-update="updateTitle"></TitleEdible>
-               <button class="btn btn-secondary done-btn" v-show="flag" @click="markTaskAsDone">
+               <button class="btn btn-secondary done-btn" v-tooltip.top="'done/undone'" v-show="flag" @click="markTaskAsDone">
                     <img src="../assets/done.png" style="width: 15px;height:15px;">                        
                </button> 
-               <button class="btn btn-secondary del-btn" v-show="flag" @click="showDelDialog">
+               <button class="btn btn-secondary del-btn" v-tooltip.bottom="'Delete this task'" v-show="flag" @click="showDelDialog">
                     <img src="../assets/del-icon.png" style="width: 15px;height:15px;">                        
                </button>               
             </div>

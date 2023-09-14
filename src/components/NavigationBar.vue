@@ -9,7 +9,7 @@
             <div class="navbar-nav xy-margin">
                 <router-link to="/" class="nav-item nav-link">Home</router-link>                              
                 
-                <DropDown :bottom="true" label="All boards" theme="auto">
+                <DropDown :bottom="true" label="All boards" theme="auto" style="z-index: 99999">
                     <div v-for="b in boards" :key="b.id" style="position: relative;">
                         <router-link class="nav-link" :to="`/board/${b.id}`">{{ b.name }}</router-link>                        
                     </div>                
@@ -17,15 +17,12 @@
 
             </div>            
         </div>
-        
-        <!-- <p class="navbar-brand">user: </p> -->
+
         <DropDown :bottom="true" :label="userEmail" theme="auto">
             <router-link  class="nav-link" to="/login" @click="removeSessionStorage" >
                 log out
             </router-link>                
-        </DropDown>
-        
-
+        </DropDown>  
     
     </nav>
  </div>
@@ -33,14 +30,8 @@
 </template>
 
 <script>
-// import DropDown from './utils/DropDown.vue';
 
-
-export default {
-    components: {
-        
-        
-    },
+export default { 
     computed: {
         showNav() {
             // Define the routes where you want to hide the navbar
@@ -56,10 +47,7 @@ export default {
             return this.$store.getters["userModule/getBoards"];
         },        
     },
-    methods: {        
-        // setCurrentBoard(id) {
-        //     this.$store.dispatch("getBoardData", id);
-        // }
+    methods: { 
         removeSessionStorage(){
             this.$store.dispatch('userModule/restartUser');
             window.sessionStorage.clear();
@@ -98,32 +86,16 @@ export default {
         z-index: 9999;
         position: relative;        
     }
-    /* .transparent-navbar {
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    min-height: 0 !inavbar-brand;   
-    /* font-family: Avenir, Helvetica, Arial, sans-serif;   */
-    /* }, */
+   
     img {
-    width: 50px;
-    height: auto; 
+        width: 50px;
+        height: auto; 
     }
 
-
-
-
-    /* nav a:hover {  
-    /* color: #1188ff; */    
-    /* background: rgb(224, 224, 224);  */
-    /* border-radius: .5rem; */
-    /* } */
-
     nav a.router-link-exact-active {
-    /* color: whitesmoke; */
-    background: rgb(207, 207, 207);
-    border-radius: .5rem;
+        /* color: whitesmoke; */
+        background: rgb(207, 207, 207);
+        border-radius: .5rem;
     }
     
 </style>

@@ -10,6 +10,7 @@ const state = {
     SET_BOARDS(state, boards) {
       state.boards = boards;
     },
+    //used for homepage and navbar list of boards
     updateBoardName(state, { index, newName }) {
       // Check if the index is valid
       if (index >= 0 && index < state.boards.length) {
@@ -21,9 +22,7 @@ const state = {
   };
   
   const actions = {
-    login({ commit }, userData) {
-      // Assuming you have a login API request here
-      // After a successful login, set the user's email and boards
+    login({ commit }, userData) {      
       const { email, boards } = userData;
   
       commit("SET_EMAIL", email);

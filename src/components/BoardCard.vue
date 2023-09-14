@@ -1,7 +1,7 @@
 <template>
   <div class="board-card" @click="openBoard" style="position: relative;">
     <div class="board-card-title">{{ board.name }}</div>
-    <button class="btn btn-secondary del-btn " @click.stop="showDelDialog(board.id)">
+    <button class="btn btn-secondary del-btn " v-tooltip.left="`delete board`" @click.stop="showDelDialog(board.id)">
         <img src="../assets/del-icon.png" style="max-width: 100%; max-height: 100%;">                        
     </button>
   </div>

@@ -89,8 +89,7 @@ export default {
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
-  box-sizing: border-box;
-  /* Additional styles for your BoardCard component */
+  box-sizing: border-box; 
 }
 
 </style>
