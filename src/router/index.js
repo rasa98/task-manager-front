@@ -4,6 +4,7 @@ import BoardView from '../views/BoardView.vue';
 import LoginView from '../views/LoginView.vue';
 import SignUpView from '../views/SignUpView.vue';
 import NotFoundPage from '../views/NotFoundPage.vue';
+import StatsView from '../views/StatsView.vue';
 
 const routes = [
   {
@@ -15,6 +16,12 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView, 
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/stats',
+    name: 'stats',
+    component: StatsView, 
     meta: { requiresAuth: true }
   },
   {

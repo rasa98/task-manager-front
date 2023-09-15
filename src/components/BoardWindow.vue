@@ -1,22 +1,34 @@
 <template> 
-    <div class="d-flex justify-content-center align-items-center mx-2 my-2">
-      <!-- <h1>{{ boardTitle }}</h1> -->
+    <div class="d-flex justify-content-center align-items-center mx-2 my-2">      
       <TitleEdible class="myTitle" :initialValue="boardTitle" @name-update="updateBoardName"></TitleEdible>      
-      <button class="btn btn-secondary del-btn mx-4" v-tooltip.right="'delete this board'" @click="showDelDialog(board.id)">
+      <button class="btn btn-secondary del-btn" v-tooltip.right="'delete this board'" @click="showDelDialog(board.id)">
           <img src="../assets/del-icon.png" style="max-width: 100%; max-height: 100%;">                        
       </button>
+      <button class="btn btn-secondary del-btn mx-4" v-tooltip.right="'snapshot current state'" @click="makeSnapshot">
+          snapshot                        
+      </button>
+
     </div>
-      <draggable class="d-flex flex-row m-2" :list="lists" itemKey="id" ghost-class="ghost" @end="onDragUpdateListsOrdering">
-            <template #item="{element, index}">
-              <ListWindow class="m-2" :listInfo="element" @del-lst="removeLocalList(index)" />                 
-            </template> 
-            <template #footer> 
-              <div class="m-2" style="width: 16rem; min-width: 16rem;">                               
-                    <FormNew v-if="!flag" :formValues="formValues" @out-of-focus="flipFlag" @text-emitted="addNewList"></FormNew>
-                    <button class="btn btn-light" v-show="flag" @click.stop="flipFlag">+ Add another list</button>                  
-              </div>
-            </template>           
-      </draggable>
+    <draggable class="d-flex flex-row m-2" :list="lists" itemKey="id" ghost-class="ghost" @end="onDragUpdateListsOrdering">
+          <template #item="{element, index}">
+            <ListWindow class="m-2" :listInfo="element" @del-lst="removeLocalList(index)" />                 
+          </template> 
+          <template #footer> 
+            <div class="m-2" style="width: 16rem; min-width: 16rem;">                               
+                  <FormNew v-if="!flag" :formValues="formValues" @out-of-focus="flipFlag" @text-emitted="addNewList"></FormNew>
+                  <button class="btn btn-light" v-show="flag" @click.stop="flipFlag">+ Add another list</button>                  
+            </div>
+          </template>           
+    </draggable>
+
+    <div class="toast fixed-bottom m-3" ref="myToast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+      <div class="toast-header">
+        <strong class="mr-auto">Success</strong>          
+      </div>
+      <div class="toast-body">
+        Snap was successfully created!
+      </div>
+    </div>
 
 </template>
 
@@ -27,6 +39,7 @@ import TitleEdible from './formComponents/TitleEdible.vue'
 import draggable from 'vuedraggable'
 import axios from 'axios'
 import { showDelDialogAndDelete } from './util/delBoardUtil';
+import {Toast} from "bootstrap";
 
 
 
@@ -59,27 +72,7 @@ export default {
       this.fetchBoardFromApi()
     }
   }
-  ,
-  // watch: {
-  //   // Watch for changes to the initialValue prop
-  //   lists: {
-  //     // immediate: true, // Trigger the watcher immediately on component creation
-  //     handler(newValue) {
-  //       this.inputValue = newValue;
-  //       this.oldInputValue = newValue;
-  //     },
-  //   },
-  //   isEditing: {
-  //     handler(newValue) {
-  //       if(newValue == false && this.oldInputValue !== this.inputValue){
-  //         console.log("old ",this.oldInputValue);
-  //         console.log("new ", this.inputValue);
-  //         this.$emit('name-update', this.inputValue);
-  //         this.oldInputValue = this.inputValue;
-  //       }
-  //     },
-  //   }
-  // },  
+  ,   
   mounted() {
     this.fetchBoardFromApi();   
   },  
@@ -87,43 +80,36 @@ export default {
     flipFlag: function() {
         this.flag = !this.flag;
     },
-    async showDelDialog(boardId){  
-      await showDelDialogAndDelete.call(this, boardId);   
-      // this.$confirm(
-      //   {
-      //     message: 'Are you sure you wanna delete this board?',
-      //     button: {
-      //       no: 'No',
-      //       yes: 'Yes'
-      //     },
-      //     /**
-      //     * Callback Function
-      //     * @param {Boolean} confirm
-      //     */
-      //     callback: confirm => {
-      //       if (confirm) {
-      //         this.deleteThisBoard(boardId);
-      //       }
-      //     }
-      //   }
-      // )
+    makeSnapshot(){
+      const boardId = this.board.id;
+
+      axios.post(`/boards/${boardId}/create-snapshot`)
+        .then((response) => {
+          // Handle the successful response here if needed
+          console.log('Snapshot created:', response.data);
+          this.showToast()
+        })
+        .catch((error) => {
+          // Handle any errors here
+          console.error('Error creating snapshot:', error);
+        });
     },
-    // deleteThisBoard(id){      
-    //   // const id = this.board.id;
-    //   axios.delete(`boards/${id}`).then(() =>  {                                                     
-    //               console.log("After deleting board");
-    //               var boards = this.$store.getters["userModule/getBoards"]; 
-    //               const filteredBoards = boards.filter(board => board.id !== id);
-    //               this.$store.dispatch("userModule/updateBoard", filteredBoards); //updates navbar
-    //               this.$router.push("/"); // go to home to make new or open existing board
-    //           }            
-    //       ).catch((error) => {
-    //       // Handle errors here
-    //       console.error('Error deleting board:', error);
-    //   });    
-    // },
+    async showDelDialog(boardId){  
+      await showDelDialogAndDelete.call(this, boardId); 
+    },
+    showToast() {
+      // Show the toast
+      const toast = this.$refs.myToast;
+      const toastInstance = new Toast(toast);
+      toastInstance.show();
+
+      // Hide the toast after 2 seconds (2000 milliseconds)
+      setTimeout(() => {
+        toastInstance.hide();
+      }, 2000);
+    },    
     updateBoardName(newName){
-      this.board.name = newName; // this is locally for this comp, but also need global vuex for home apge and navbar
+      this.board.name = newName; // this is local update, but also need global vuex state for home page and navbar
       const boardIdToUpdate = this.board.id;      
 
       const index = this.$store.getters['userModule/getBoards'].findIndex((board) => board.id === boardIdToUpdate);
@@ -229,13 +215,18 @@ export default {
   .d-flex {
     align-items: start;
   } 
-  .del-btn {  
-      /* position: absolute; */
-      /* opacity: 0.5;  */
-      /* right: 0;       */
-      background-color: rgb(226, 226, 226);         
+  .del-btn { 
+     
+      background-color: rgb(226, 226, 226);  
+      color: black;       
       border: none;
-      width: 52px;height:52px;
+      width: auto;height:52px;
       /* top: 0;               */
   } 
+  .toast.fixed-bottom {
+    position: fixed;
+    bottom: 20px; 
+    left: auto;
+    right: 20px; 
+  }
 </style>

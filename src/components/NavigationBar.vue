@@ -15,6 +15,7 @@
                     </div>                
                 </DropDown>
 
+                <router-link to="/stats" class="nav-item nav-link">Statistics</router-link>
             </div>            
         </div>
 
