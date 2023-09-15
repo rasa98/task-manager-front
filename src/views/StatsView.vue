@@ -2,7 +2,7 @@
   <div class="centered-container">
     <div class="m-4 p-4 text-center"> <!-- Center the content horizontally -->
       <p>Choose the board</p>
-      <DropDown :bottom="true" :width="'20rem'" label="All boards" theme="auto">
+      <DropDown :bottom="true" :width="'20rem'" :label="selectedBoard ? selectedBoard.name : 'Choose a board'" theme="auto">
         <div v-for="b in boards" :key="b.id" @click="selectBoardAndLoadSnapshots(b)" style="position: relative;">
           <p>{{ b.name }}</p>
         </div>
@@ -45,7 +45,8 @@ export default {
         Line,
     },
     data() {
-        return {                        
+        return {  
+            selectedBoard: null,                      
             chartData: null,
             options: {
                 responsive: true,
@@ -62,6 +63,7 @@ export default {
         async selectBoardAndLoadSnapshots(selectedBoard) {  
             try{
                 const resp = await axios.get(`boards/${selectedBoard.id}/snapshots`);
+                this.selectedBoard = selectedBoard;
                 this.prepareSnapshotsForChart(resp.data);
             } catch(error) {
                 // Handle errors
